@@ -1,0 +1,59 @@
+/* layout.css – layout & view handling */
+.top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #151827;
+    color: #fff;
+    padding: 10px 20px;
+}
+.logo-area {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.logo {
+    width: 32px;
+    height: 32px;
+}
+.top-nav {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+.nav-btn {
+    border: none;
+    background: #202634;
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 16px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+.nav-btn.active {
+    background: #5F0AFF;
+}
+#views-container {
+    padding: 16px;
+}
+.view {
+    display: none;
+}
+.view.active {
+    display: block;
+}
+.hidden {
+    display: none;
+}
+.login-screen {
+    max-width: 420px;
+    margin: 40px auto;
+    padding: 24px;
+    background: #202634;
+    border-radius: 12px;
+    text-align: center;
+}
+.login-bg {
+    max-width: 260px;
+    margin-top: 16px;
+}

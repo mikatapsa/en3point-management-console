@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Page</title>
+  <link rel="stylesheet" href="./css/login.css">
+</head>
+<body>
+  <div class="login-container">
+    <div class="background-image"></div>    
+    <div class="background-overlay"></div> <!-- Add this line for the overlay -->
+
+    <div class="login-content">
+      <h2>en3point Management Platform</h2>
+      <div class="carousel-container">
+        <h3>Pick Your Service Provider</h3>
+        <div class="carousel">
+          <div class="carousel-item">
+            <img src="./media/en3point.png" alt="Provider 1 Icon">
+
+          </div>
+          <div class="carousel-item">
+            <img src="./media/gamesportal.png" alt="Provider 2 Icon">
+          </div>
+          <div class="carousel-item">
+            <img src="./media/sportsportal.png" alt="Provider 3 Icon">
+          </div>
+        </div>
+      </div>
+      <form id="login-form">
+        <label for="username">User ID:</label>
+        <input type="text" id="username" name="username" placeholder="Enter your User ID" required>
+        
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" placeholder="Enter your Password" required>
+
+        <div id="error-message" class="error-message"></div>
+
+        <button type="button" id="login-button">Login</button>
+        <p class="reset-password">
+          <a href="#" id="reset-password-link">Reset the password</a>
+        </p>
+      </form>
+    </div>
+  </div>
+  <script src="./js/en3pointlibrary.js"></script>
+  <script src="./js/login.js"></script>
+</body>
+</html>

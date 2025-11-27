@@ -1,0 +1,9 @@
+/* base.css – global resets / typography */
+* { box-sizing: border-box; }
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #0b0c10;
+    color: #f5f5f5;
+}
+h1 { margin-top: 0; }
