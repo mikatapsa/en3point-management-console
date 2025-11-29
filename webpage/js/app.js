@@ -1,32 +1,51 @@
 // app.js – unified SPA navigation + per-view init hooks
 
-const views = document.querySelectorAll(".view");
 const buttons = document.querySelectorAll(".nav-btn");
+const viewsContainer = document.getElementById("views-container");
+let currentView = null;
 
 // map of init functions per view (to be filled as you migrate logic)
 const viewInitializers = {
+    users: () => import("./modules/users.js").then(m => m.init && m.init()),
+    tokens: () => import("./modules/tokens.js").then(m => m.init && m.init()),
     // dashboard: () => import("./modules/dashboard.js").then(m => m.init && m.init()),
-    // users: () => import("./modules/users.js").then(m => m.init && m.init()),
 };
 
-function showView(name) {
+// Load HTML module content
+async function loadViewContent(name) {
+    try {
+        const response = await fetch(`./html/modules/${name}.html`);
+        if (!response.ok) {
+            throw new Error(`Failed to load ${name}.html`);
+        }
+        return await response.text();
+    } catch (error) {
+        console.error(`Error loading view ${name}:`, error);
+        return `<h1>Error Loading View</h1><p>Could not load ${name} view.</p>`;
+    }
+}
+
+async function showView(name) {
     // Check auth before view transition
     if (!checkAuth()) {
         return; // showLoginModal() already called by checkAuth
     }
 
-    views.forEach(v => v.classList.remove("active"));
-    const target = document.getElementById(`view-${name}`);
-    if (target) {
-        target.classList.add("active");
-    }
-
+    // Update active button
     buttons.forEach(b => {
         b.classList.toggle("active", b.dataset.view === name);
     });
 
-    if (viewInitializers[name]) {
-        viewInitializers[name]();
+    // Load and display view content
+    if (currentView !== name) {
+        const content = await loadViewContent(name);
+        viewsContainer.innerHTML = content;
+        currentView = name;
+
+        // Call view initializer if exists
+        if (viewInitializers[name]) {
+            viewInitializers[name]();
+        }
     }
 }
 

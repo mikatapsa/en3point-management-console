@@ -1,8 +1,8 @@
 
 # Copilot Instructions – Unified Single-Page Management Console
 
-We are using a SINGLE `index.html` with all views as `<section>` blocks.
-Navigation is done by hide/unhide using CSS classes, not by loading new HTML files.
+We are using a SINGLE `index.html` as the shell, with view content loaded dynamically from separate HTML module files.
+Navigation loads HTML content from `html/modules/<name>.html` files into the main container.
 
 ## Project Structure
 
@@ -11,11 +11,25 @@ en3point-management-console/
 ├── .github/
 │   └── copilot-instructions.md    # This file
 ├── webpage/
-│   ├── index.html                 # Single-page app with all 13 views
+│   ├── index.html                 # Shell with header, nav, login modal, view container
 │   ├── assets/
 │   │   └── media/
 │   │       ├── en3point.png       # Logo
 │   │       └── loginbackground.png
+│   ├── html/
+│   │   └── modules/               # View HTML content (loaded dynamically)
+│   │       ├── dashboard.html
+│   │       ├── users.html
+│   │       ├── wallets.html
+│   │       ├── tokens.html
+│   │       ├── security.html
+│   │       ├── engagement.html
+│   │       ├── marketplace.html
+│   │       ├── distribution.html
+│   │       ├── tokeneditor.html
+│   │       ├── condition_builder.html
+│   │       ├── chart.html
+│   │       └── perspective.html
 │   ├── css/
 │   │   ├── base.css               # Global resets, typography, dark theme
 │   │   ├── layout.css             # Top bar, nav, view system, login layout
@@ -36,7 +50,7 @@ en3point-management-console/
 │   │       ├── perspective.css
 │   │       └── login.css
 │   └── js/
-│       ├── app.js                 # Navigation system + viewInitializers
+│       ├── app.js                 # Navigation system + HTML loading + viewInitializers
 │       └── modules/
 │           ├── dashboard.js
 │           ├── users.js
@@ -56,18 +70,20 @@ en3point-management-console/
 ## Current Implementation Status
 
 ### ✅ Implemented
-- **Single-page architecture**: All 13 views in one `index.html`
+- **Single-page shell**: `index.html` contains header, nav, login modal, and view container
+- **Modular HTML**: Each view in separate file (`html/modules/<name>.html`)
+- **Dynamic loading**: `app.js` fetches and injects HTML content on navigation
 - **Navigation system**: Top bar with 12 nav buttons + login modal
-- **View switching**: `showView(name)` toggles `.active` class
-- **CSS structure**: Modular organization matching JS structure
+- **CSS structure**: Modular organization matching JS/HTML structure
   - 4 base stylesheets (base, layout, theme, components)
-  - 13 module-specific CSS files in `css/modules/`
+  - 12 module-specific CSS files in `css/modules/`
+  - 12 module-specific HTML files in `html/modules/`
 - **JS module scaffolding**: 13 module files in `js/modules/`
 - **Login system**: Full-screen modal with auth checking
 - **Dark theme**: Base styling with dark background (#0b0c10), light text
 - **Logo integration**: en3point.png in top bar
 
-### 13 Views (All Placeholder Content)
+### 12 Views (Modular HTML Files)
 1. **dashboard** – Main overview (default view)
 2. **users** – User management
 3. **wallets** – Wallet operations
@@ -80,7 +96,8 @@ en3point-management-console/
 10. **condition_builder** – Condition builder UI
 11. **chart** – Chart/analytics view
 12. **perspective** – Perspective management
-13. **login** – Login screen (with background image)
+
+Note: Login is a modal overlay, not a separate view.
 
 ### ❌ Not Yet Implemented
 - View-specific business logic (modules are empty)
@@ -162,16 +179,16 @@ en3point-management-console/
      ```js
      // In js/modules/users.js
      export function init() {
-         const addBtn = document.querySelector("#view-users .add-user-btn");
+         const addBtn = document.querySelector(".add-user-btn");
          addBtn.addEventListener("click", () => { /* ... */ });
      }
      ```
+   - Note: No need to scope queries to `#view-users` since HTML is injected into container
 
-7. **No new HTML files for views**
-   - Do not create `/views/*.html` for new sections
-   - Extend `index.html` by inserting new `<section id="view-<name>" class="view hidden">...</section>`
-   - Add corresponding nav button in top bar
-
+7. **Adding new views**
+   - Create `html/modules/<name>.html` with view content
+   - Create `css/modules/<name>.css` with view-specific styles
+   - Create `js/modules/<name>.js` with view logic
 8. **Components**
    - Reusable fragments (cards, tables, forms) defined in `components.css`
    - For complex components, create template strings in module files
@@ -192,13 +209,12 @@ en3point-management-console/
    - Reference with relative paths: `./assets/media/en3point.png`
 
 10. **Module development pattern**
-    - Scope all queries to the view:
-      ```js
-      export function init() {
-          const root = document.getElementById("view-users");
-          const list = root.querySelector(".users-list");
-          const addBtn = root.querySelector(".add-user-btn");
-          // ...
+    - HTML files contain only markup (no script tags)
+    - CSS files style the view-specific elements
+    - JS files handle all interactivity
+    - Query elements directly (no need to scope to view ID)
+    - Clean up event listeners if needed (e.g., for recurring timers)
+    - Keep modules focused on single responsibility
       }
       ```
     - Clean up event listeners if needed (e.g., for recurring timers)
@@ -222,35 +238,37 @@ Use these consistently throughout new components.
 1. **Locate the view section** in `index.html` (e.g., `#view-dashboard`)
 2. **Replace placeholder content** with your HTML structure
 3. **Add styles** to `components.css` with view-prefixed classes
-4. **Create module logic** in `js/modules/<name>.js`:
+### Adding Content to an Existing View
+
+1. **Edit the HTML module** in `html/modules/<name>.html`
+2. **Add styles** to `css/modules/<name>.css` with view-prefixed classes
+3. **Create module logic** in `js/modules/<name>.js`:
    ```js
    export function init() {
-       const root = document.getElementById("view-<name>");
        // Your initialization code
+       // Elements are directly accessible (already in DOM)
    }
    ```
-5. **Register in viewInitializers** in `js/app.js`
+4. **Register in viewInitializers** in `js/app.js`
 
 ### Adding a New View
 
-1. **Add section** to `index.html`:
+1. **Create HTML module**: `html/modules/<name>.html`
    ```html
-   <section id="view-newview" class="view hidden">
-       <h1>New View</h1>
-       <p>Content here</p>
-   </section>
+   <h1>New View</h1>
+   <p>Content here</p>
    ```
-2. **Add nav button** in top bar:
+2. **Create CSS module**: `css/modules/<name>.css`
+3. **Create JS module**: `js/modules/<name>.js`
+4. **Add nav button** in `index.html` top bar:
    ```html
-   <button class="nav-btn" data-view="newview">New View</button>
+   <button class="nav-btn" data-view="<name>">New View</button>
    ```
-3. **Create module**: `js/modules/newview.js`
-4. **Register in viewInitializers**: `js/app.js`
-
-### Testing Locally
-
-```bash
-cd webpage
+5. **Add CSS link** in `index.html` head:
+   ```html
+   <link rel="stylesheet" href="./css/modules/<name>.css" />
+   ```
+6. **Register initializer**: `js/app.js` viewInitializers object
 python3 -m http.server 8080
 # Visit http://localhost:8080
 ```
@@ -260,10 +278,12 @@ python3 -m http.server 8080
 ### Loading Data into a View
 
 ```js
+### Loading Data into a View
+
+```js
 // js/modules/users.js
 export async function init() {
-    const root = document.getElementById("view-users");
-    const listEl = root.querySelector(".users-list");
+    const listEl = document.querySelector(".users-list");
     
     // Fetch data (replace with actual API)
     const users = await fetchUsers();
@@ -274,16 +294,11 @@ export async function init() {
             <h3>${u.name}</h3>
             <p>${u.email}</p>
         </div>
-    `).join('');
-}
-```
-
 ### Form Handling
 
 ```js
 export function init() {
-    const root = document.getElementById("view-users");
-    const form = root.querySelector(".user-form");
+    const form = document.querySelector(".user-form");
     
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
@@ -296,6 +311,7 @@ export function init() {
         // Refresh view
         init();
     });
+}   });
 }
 ```
 
@@ -356,15 +372,17 @@ async function fetchUsers() {
 
 ## Key Takeaways for AI Agents
 
-1. **Single HTML file** – all views are sections in `index.html`
-2. **No inline handlers** – all events bound in module `init()` functions
-3. **View-scoped queries** – always query within `document.getElementById("view-<name>")`
-4. **CSS organization** – use existing 4 CSS files, prefix classes by view
-5. **Dark theme** – maintain consistent color scheme (#0b0c10 bg, #5F0AFF accent)
-6. **Module pattern** – one module per view, export `init()`, register in `viewInitializers`
-7. **Top bar navigation** – nav buttons use `data-view` attributes, no href links
-8. **13 views ready** – all placeholders exist, ready for content migration
-9. **ES6 modules** – use `import`/`export`, script tag has `type="module"`
-10. **Local testing** – run `python3 -m http.server 8080` in `webpage/` directory
+1. **Modular HTML structure** – each view in `html/modules/<name>.html`
+2. **Modular CSS structure** – each view CSS in `css/modules/<name>.css`
+3. **Modular JS structure** – each view logic in `js/modules/<name>.js`
+4. **Dynamic loading** – `app.js` fetches HTML and injects into container
+5. **No scoping needed** – query elements directly (only one view loaded at a time)
+6. **No inline handlers** – all events bound in module `init()` functions
+7. **Dark theme** – maintain consistent color scheme (#0b0c10 bg, #5F0AFF accent)
+8. **Module pattern** – one module per view (HTML + CSS + JS), export `init()`, register in `viewInitializers`
+9. **Top bar navigation** – nav buttons use `data-view` attributes
+10. **12 views ready** – all placeholder files exist, ready for content
+11. **ES6 modules** – use `import`/`export`, script tag has `type="module"`
+12. **Local testing** – run `python3 -m http.server 8080` in `webpage/` directory
 
 When adding features, prioritize consistency with existing patterns, dark theme aesthetics, and mobile-responsive design. Always test navigation between views before completing work.

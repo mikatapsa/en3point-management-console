@@ -1,0 +1,35 @@
+<div class="users-container">
+    <!-- Left Panel: User List -->
+    <div class="users-left-panel">
+        <h1>Users Management</h1>
+        
+        <!-- Tag Selector -->
+        <div class="users-tag-selector">
+            <button class="users-tag active" data-tag="all">All Users</button>
+            <button class="users-tag" data-tag="tag1">Tag1</button>
+            <button class="users-tag" data-tag="tag2">Tag2</button>
+        </div>
+
+        <!-- Search Box -->
+        <div class="users-search-box">
+            <input type="text" id="users-search-input" placeholder="Search by name or email..." />
+        </div>
+
+        <!-- User List -->
+        <div class="users-list" id="users-list">
+            <!-- User items will be populated by JS -->
+            <div class="users-list-empty">
+                <p>Loading users...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Panel: User Details -->
+    <div class="users-right-panel">
+        <div class="users-detail-container" id="users-detail-container">
+            <div class="users-detail-empty">
+                <p>Select a user to view details</p>
+            </div>
+        </div>
+    </div>
+</div>

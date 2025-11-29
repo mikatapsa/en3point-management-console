@@ -36,11 +36,9 @@
 #views-container {
     padding: 16px;
 }
-.view {
-    display: none;
-}
-.view.active {
-    display: block;
+.view-content {
+    /* Dynamic content container */
+    min-height: calc(100vh - 100px);
 }
 .hidden {
     display: none;

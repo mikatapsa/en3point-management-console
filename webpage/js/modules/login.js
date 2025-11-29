@@ -1,72 +1,9 @@
 // login.js – authentication and login modal handling
 
-// Mock API function - replace with actual backend call
-async function en3pointLogin({ userid, password }) {
-    // TODO: Replace with actual API call to en3point-backend
-    // const response = await fetch('API_ENDPOINT/auth/login', {
-    //     method: 'POST',
-    //     headers: { 'Content-Type': 'application/json' },
-    //     body: JSON.stringify({ userid, password })
-    // });
-    // return await response.json();
+import { login, validateToken, checkLoginStatus } from '../en3point-backend.js';
 
-    // Mock successful login for development
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            if (userid && password) {
-                resolve({
-                    status: true,
-                    result: {
-                        authToken: `mock-token-${Date.now()}`,
-                        walletAddress: '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb',
-                        userid: userid,
-                        role: 'admin'
-                    }
-                });
-            } else {
-                resolve({ status: false, error: 'Invalid credentials' });
-            }
-        }, 500);
-    });
-}
-
-// Mock token validation - replace with actual backend call
-async function isLogin(token) {
-    // TODO: Replace with actual API call to validate token
-    // const response = await fetch('API_ENDPOINT/auth/validate', {
-    //     headers: { 'Authorization': `Bearer ${token}` }
-    // });
-    // return await response.json();
-
-    // Mock validation for development
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            resolve({ status: token && token.startsWith('mock-token-') });
-        }, 200);
-    });
-}
-
-// Check login status and validate token
-export async function checkLoginStatus() {
-    let loginStatus = "anon";
-    let token = localStorage.getItem("authToken");
-    
-    if (token) {
-        const activeLogin = await isLogin(token);
-        if (activeLogin.status) {
-            loginStatus = "registered";
-        } else {
-            // Token invalid, clear it
-            localStorage.removeItem("authToken");
-            localStorage.removeItem("userid");
-            localStorage.removeItem("walletAddress");
-            localStorage.removeItem("adminData");
-        }
-    }
-    
-    localStorage.setItem("loginStatus", loginStatus);
-    return loginStatus;
-}
+// Check login status and validate token (re-exported from backend)
+export { checkLoginStatus };
 
 // Update admin info display
 function updateAdminInfo() {
@@ -114,7 +51,7 @@ async function handleLogin(event) {
     loginButton.textContent = 'Logging in...';
     
     try {
-        const result = await en3pointLogin({ userid: username, password });
+        const result = await login({ userid: username, password });
         
         if (result.status) {
             // Store auth data

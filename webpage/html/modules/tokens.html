@@ -1,0 +1,208 @@
+<!-- Token Studio - Build and mint new tokens -->
+
+<div class="token-studio">
+    <!-- Discussion Section (Top) -->
+    <section class="token-discussion">
+        <div class="discussion-left">
+            <h3>Describe Your Token</h3>
+            <textarea 
+                id="token-description-input" 
+                class="discussion-input" 
+                placeholder="Describe the token you want to build... (e.g., 'I want to create a reward token for our loyalty program with 1 million supply')"
+                rows="6"
+            ></textarea>
+            <button id="discuss-token-btn" class="btn btn-primary">
+                <span>💬</span> Discuss with AI
+            </button>
+        </div>
+        <div class="discussion-right">
+            <h3>AI Response</h3>
+            <div id="ai-response" class="ai-response">
+                <p class="placeholder-text">Ask me anything about your token and I'll help you design it!</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Token Building Section -->
+    <section class="token-builder">
+        <!-- Left: Multi-phase Wizard -->
+        <div class="builder-wizard">
+            <h2>Token Creator</h2>
+            
+            <!-- Progress Bar -->
+            <div class="wizard-progress">
+                <div class="progress-step active" data-step="1">
+                    <span class="step-number">1</span>
+                    <span class="step-label">Basic Info</span>
+                </div>
+                <div class="progress-step" data-step="2">
+                    <span class="step-number">2</span>
+                    <span class="step-label">Image</span>
+                </div>
+                <div class="progress-step" data-step="3">
+                    <span class="step-number">3</span>
+                    <span class="step-label">Properties</span>
+                </div>
+                <div class="progress-step" data-step="4">
+                    <span class="step-number">4</span>
+                    <span class="step-label">AI Properties</span>
+                </div>
+                <div class="progress-step" data-step="5">
+                    <span class="step-number">5</span>
+                    <span class="step-label">Review</span>
+                </div>
+            </div>
+
+            <!-- Step Content -->
+            <div class="wizard-content">
+                <!-- Step 1: Basic Info -->
+                <div class="wizard-step active" data-step="1">
+                    <h3>Basic Information</h3>
+                    <div class="form-group">
+                        <label for="token-name">Token Name *</label>
+                        <input type="text" id="token-name" placeholder="e.g., Reward Token" />
+                    </div>
+                    <div class="form-group">
+                        <label for="token-symbol">Token Symbol *</label>
+                        <input type="text" id="token-symbol" placeholder="e.g., RWT" maxlength="10" />
+                    </div>
+                    <div class="form-group">
+                        <label for="token-description">Description</label>
+                        <textarea id="token-description" placeholder="Describe your token..." rows="4"></textarea>
+                    </div>
+                </div>
+
+                <!-- Step 2: Image -->
+                <div class="wizard-step" data-step="2">
+                    <h3>Token Image</h3>
+                    <div class="image-options">
+                        <div class="form-group">
+                            <label>
+                                <input type="radio" name="image-option" value="upload" checked />
+                                Upload Image File
+                            </label>
+                            <input type="file" id="token-image-upload" accept="image/*" />
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <input type="radio" name="image-option" value="generate" />
+                                Generate with AI
+                            </label>
+                            <input type="text" id="token-image-prompt" placeholder="Describe the image you want..." />
+                            <button id="generate-image-btn" class="btn btn-secondary">Generate</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3: Properties -->
+                <div class="wizard-step" data-step="3">
+                    <h3>Token Properties</h3>
+                    
+                    <div class="standard-properties">
+                        <h4>Standard Properties</h4>
+                        <div class="form-group">
+                            <label for="token-type">Token Type</label>
+                            <select id="token-type">
+                                <option value="ERC20">ERC-20 (Fungible)</option>
+                                <option value="ERC721">ERC-721 (NFT)</option>
+                                <option value="ERC1155">ERC-1155 (Multi-Token)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="token-supply">Total Supply</label>
+                            <input type="number" id="token-supply" placeholder="1000000" />
+                        </div>
+                        <div class="form-group">
+                            <label for="token-decimals">Decimals</label>
+                            <input type="number" id="token-decimals" value="18" min="0" max="18" />
+                        </div>
+                    </div>
+
+                    <div class="custom-properties">
+                        <h4>Custom Properties</h4>
+                        <div id="custom-properties-list"></div>
+                        <button id="add-property-btn" class="btn btn-secondary">+ Add Property</button>
+                    </div>
+                </div>
+
+                <!-- Step 4: AI Properties -->
+                <div class="wizard-step" data-step="4">
+                    <h3>AI-Generated Properties</h3>
+                    <div class="form-group">
+                        <label for="ai-property-prompt">Describe additional properties in free text</label>
+                        <textarea 
+                            id="ai-property-prompt" 
+                            placeholder="e.g., This token should be burnable, pausable, and have a maximum holding limit of 10000 per wallet"
+                            rows="5"
+                        ></textarea>
+                        <button id="generate-properties-btn" class="btn btn-primary">Generate Properties</button>
+                    </div>
+                    <div id="generated-properties" class="generated-properties"></div>
+                </div>
+
+                <!-- Step 5: Review -->
+                <div class="wizard-step" data-step="5">
+                    <h3>Review & Mint</h3>
+                    <div class="mint-options">
+                        <div class="form-group">
+                            <label for="blockchain-select">Select Blockchain</label>
+                            <select id="blockchain-select">
+                                <option value="ethereum">Ethereum Mainnet</option>
+                                <option value="polygon">Polygon</option>
+                                <option value="bsc">Binance Smart Chain</option>
+                                <option value="sepolia">Sepolia Testnet</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="wallet-select">Mint to Wallet</label>
+                            <select id="wallet-select">
+                                <option value="">Select wallet...</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="mint-quantity">Quantity to Mint</label>
+                            <input type="number" id="mint-quantity" placeholder="1000" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Wizard Navigation -->
+            <div class="wizard-nav">
+                <button id="prev-step-btn" class="btn btn-secondary" disabled>Previous</button>
+                <button id="next-step-btn" class="btn btn-primary">Next</button>
+                <button id="create-token-btn" class="btn btn-success" style="display: none;">Create Token</button>
+            </div>
+        </div>
+
+        <!-- Right: Token Preview -->
+        <div class="token-preview">
+            <h2>Token Preview</h2>
+            <div class="preview-card">
+                <div class="preview-image">
+                    <div id="preview-image-placeholder" class="image-placeholder">
+                        <span>🪙</span>
+                        <p>No image yet</p>
+                    </div>
+                </div>
+                <div class="preview-details">
+                    <h3 id="preview-name">Token Name</h3>
+                    <p class="preview-symbol" id="preview-symbol">SYMBOL</p>
+                    <p class="preview-description" id="preview-description">Token description will appear here...</p>
+                    
+                    <div class="preview-properties">
+                        <h4>Properties</h4>
+                        <div id="preview-properties-list" class="properties-list">
+                            <p class="placeholder-text">Properties will appear as you fill the form</p>
+                        </div>
+                    </div>
+
+                    <div class="preview-actions">
+                        <h4>Final Actions</h4>
+                        <div id="preview-actions-list" class="actions-list"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
