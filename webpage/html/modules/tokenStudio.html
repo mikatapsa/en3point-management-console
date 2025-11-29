@@ -1,41 +1,16 @@
-<!--
-    Token Studio – Build and mint new tokens
-
-    Preview requirements:
-    - Show a 100px x 100px token image on the left
-    - Standard token information to the right of the image (name, symbol, description)
-    - Numeric values (e.g., total supply, decimals) listed below
-    - Standard features followed by user-defined features
-    - Preview area must be scrollable
--->
-
 <div class="token-studio">
-    <!-- Discussion Section (Top) -->
-    <section class="token-discussion">
-        <div class="discussion-left">
-            <h3>Describe Your Token</h3>
-            <textarea 
-                id="token-description-input" 
-                class="discussion-input" 
-                placeholder="Describe the token you want to build... (e.g., 'I want to create a reward token for our loyalty program with 1 million supply')"
-                rows="6"
-            ></textarea>
-            <button id="discuss-token-btn" class="btn btn-primary">
-                <span>💬</span> Discuss with AI
-            </button>
-        </div>
-        <div class="discussion-right">
-            <h3>AI Response</h3>
-            <div id="ai-response" class="ai-response">
-                <p class="placeholder-text">Ask me anything about your token and I'll help you design it!</p>
-            </div>
-        </div>
-    </section>
+    <!-- Mode Selector -->
+    <div class="mode-selector">
+        <button class="mode-btn active" data-mode="creator">Token Creator</button>
+        <button class="mode-btn" data-mode="finder">Token Finder</button>
+        <button class="mode-btn" data-mode="editor">Token Editor</button>
+        <button class="mode-btn" data-mode="minter">Token Minter</button>
+    </div>
 
-    <!-- Token Building Section -->
-    <section class="token-builder">
+    <!-- Token Creator Mode -->
+    <section class="token-builder token-mode active" data-mode="creator">
         <!-- Left: Multi-phase Wizard -->
-        <div class="builder-wizard">
+        <div class="builder-wizard scrollable">
             <h2>Token Creator</h2>
             
             <!-- Progress Bar -->
@@ -185,7 +160,7 @@
         </div>
 
         <!-- Right: Token Preview -->
-        <div class="token-preview">
+        <div class="token-preview scrollable">
             <h2>Token Preview</h2>
             <div class="preview-card">
                 <div class="preview-image">
@@ -212,6 +187,50 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </section>
+
+    <!-- Token Finder Mode -->
+    <section class="token-mode" data-mode="finder">
+        <div class="mode-content">
+            <h2>Token Finder</h2>
+            <div class="search-section">
+                <input type="text" placeholder="Search by name, symbol, or address..." class="search-input" />
+                <button class="btn btn-primary">Search</button>
+            </div>
+            <div class="results-list">
+                <p class="placeholder-text">Search results will appear here</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Token Editor Mode -->
+    <section class="token-mode" data-mode="editor">
+        <div class="mode-content">
+            <h2>Token Editor</h2>
+            <p class="placeholder-text">Select a token to edit its properties</p>
+        </div>
+    </section>
+
+    <!-- Token Minter Mode -->
+    <section class="token-mode" data-mode="minter">
+        <div class="mode-content">
+            <h2>Token Minter</h2>
+            <div class="form-group">
+                <label for="mint-token-select">Select Token</label>
+                <select id="mint-token-select">
+                    <option value="">Choose a token...</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="mint-to-address">Mint to Address</label>
+                <input type="text" id="mint-to-address" placeholder="0x..." />
+            </div>
+            <div class="form-group">
+                <label for="mint-amount">Amount</label>
+                <input type="number" id="mint-amount" placeholder="1000" />
+            </div>
+            <button class="btn btn-primary">Mint Tokens</button>
         </div>
     </section>
 </div>

@@ -1,4 +1,13 @@
-<div class="users-container">
+<!-- 
+ new instructions: 
+ add top level selection, find user, on-board new user, on board new admin, onboard new member -->
+<div class="users-mode-selector">
+    <button class="users-mode-btn active" data-mode="find">Find User</button>
+    <button class="users-mode-btn" data-mode="onboard-user">Onboard User</button>
+    <button class="users-mode-btn" data-mode="onboard-admin">Onboard Admin</button>
+    <button class="users-mode-btn" data-mode="onboard-member">Onboard Member</button>
+</div>
+<div class="users-container" data-mode="find">
     <!-- Left Panel: User List -->
     <div class="users-left-panel">
         <h1>Users Management</h1>
@@ -33,3 +42,30 @@
         </div>
     </div>
 </div>
+<div class="users-onboard-panels">
+    <form id="onboard-user-form" class="users-onboard-form" data-mode-panel="onboard-user" hidden>
+        <h2>Onboard User</h2>
+        <div class="form-group"><label for="ou-name">Name</label><input id="ou-name" type="text" required /></div>
+        <div class="form-group"><label for="ou-email">Email</label><input id="ou-email" type="email" required /></div>
+        <div class="form-group"><label for="ou-wallet">Wallet Address</label><input id="ou-wallet" type="text" placeholder="0x..." /></div>
+        <button type="submit" class="btn btn-success">Create User</button>
+        <div class="users-onboard-status" id="ou-status"></div>
+    </form>
+    <form id="onboard-admin-form" class="users-onboard-form" data-mode-panel="onboard-admin" hidden>
+        <h2>Onboard Admin</h2>
+        <div class="form-group"><label for="oa-name">Name</label><input id="oa-name" type="text" required /></div>
+        <div class="form-group"><label for="oa-email">Email</label><input id="oa-email" type="email" required /></div>
+        <div class="form-group"><label for="oa-role">Role</label><input id="oa-role" type="text" value="Admin" /></div>
+        <button type="submit" class="btn btn-success">Create Admin</button>
+        <div class="users-onboard-status" id="oa-status"></div>
+    </form>
+    <form id="onboard-member-form" class="users-onboard-form" data-mode-panel="onboard-member" hidden>
+        <h2>Onboard Member</h2>
+        <div class="form-group"><label for="om-name">Name</label><input id="om-name" type="text" required /></div>
+        <div class="form-group"><label for="om-email">Email</label><input id="om-email" type="email" required /></div>
+        <div class="form-group"><label for="om-group">Group</label><input id="om-group" type="text" placeholder="e.g. rewards" /></div>
+        <button type="submit" class="btn btn-success">Create Member</button>
+        <div class="users-onboard-status" id="om-status"></div>
+    </form>
+</div>
+

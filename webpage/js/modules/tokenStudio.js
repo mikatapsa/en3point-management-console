@@ -4,6 +4,7 @@ import { getWallets } from '../en3point-backend.js';
 
 // State management
 let currentStep = 1;
+let currentMode = 'creator';
 const totalSteps = 5;
 let tokenData = {
     name: '',
@@ -46,7 +47,11 @@ export async function init() {
     
     // Reset state
     currentStep = 1;
+    currentMode = 'creator';
     resetTokenData();
+    
+    // Setup mode switching
+    setupModeSelector();
     
     // Setup event listeners
     setupDiscussionListeners();
@@ -59,6 +64,30 @@ export async function init() {
     
     // Update preview
     updatePreview();
+}
+
+// Mode Selector
+function setupModeSelector() {
+    const modeButtons = document.querySelectorAll('.mode-btn');
+    const tokenModes = document.querySelectorAll('.token-mode');
+    
+    modeButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const mode = btn.dataset.mode;
+            
+            // Update active button
+            modeButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            // Update active mode
+            tokenModes.forEach(m => m.classList.remove('active'));
+            const targetMode = document.querySelector(`.token-mode[data-mode="${mode}"]`);
+            if (targetMode) {
+                targetMode.classList.add('active');
+                currentMode = mode;
+            }
+        });
+    });
 }
 
 function resetTokenData() {

@@ -175,6 +175,43 @@ export async function init() {
         
         // Initial render
         renderUserList();
+
+        // Mode selection handlers
+        const modeButtons = document.querySelectorAll('.users-mode-btn');
+        const userContainer = document.querySelector('.users-container');
+        const forms = document.querySelectorAll('.users-onboard-form');
+
+        function switchMode(mode) {
+            modeButtons.forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
+            if (userContainer) {
+                userContainer.style.display = (mode === 'find') ? 'grid' : 'none';
+            }
+            forms.forEach(f => {
+                const frmMode = f.getAttribute('data-mode-panel');
+                f.hidden = frmMode !== mode;
+            });
+        }
+        modeButtons.forEach(btn => {
+            btn.addEventListener('click', () => switchMode(btn.dataset.mode));
+        });
+
+        // Stub onboarding form submissions
+        const formDefs = [
+            { id: 'onboard-user-form', status: 'ou-status', label: 'User' },
+            { id: 'onboard-admin-form', status: 'oa-status', label: 'Admin' },
+            { id: 'onboard-member-form', status: 'om-status', label: 'Member' },
+        ];
+        formDefs.forEach(def => {
+            const form = document.getElementById(def.id);
+            const statusEl = document.getElementById(def.status);
+            form?.addEventListener('submit', (e) => {
+                e.preventDefault();
+                if (statusEl) {
+                    statusEl.textContent = `Onboarding ${def.label} (demo)...`;
+                    setTimeout(()=>{ statusEl.textContent = `${def.label} onboarded (demo, not persisted).`; form.reset(); }, 900);
+                }
+            });
+        });
         
     } catch (error) {
         console.error('Failed to load users:', error);

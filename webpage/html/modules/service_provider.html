@@ -1,0 +1,31 @@
+<!-- service_provider.html - Renamed from perspective.html -->
+<div class="service-provider-view">
+  <h1>Service Provider Management</h1>
+  <div class="sp-mode-selector">
+    <button class="sp-mode-btn active" data-mode="onboard">Onboard Provider</button>
+    <button class="sp-mode-btn" data-mode="manage">Manage Services</button>
+  </div>
+  <div class="sp-panels">
+    <section id="sp-onboard" class="sp-panel active">
+      <h2>Onboard New Service Provider</h2>
+      <form id="sp-onboard-form" class="sp-form">
+        <div class="form-group"><label for="sp-name">Provider Name</label><input id="sp-name" type="text" required /></div>
+        <div class="form-group"><label for="sp-contact">Contact Email</label><input id="sp-contact" type="email" required /></div>
+        <div class="form-group"><label for="sp-services">Services (comma separated)</label><input id="sp-services" type="text" placeholder="analytics, storage" /></div>
+        <button type="submit" class="btn btn-success">Onboard Provider</button>
+      </form>
+      <div id="sp-onboard-status" class="sp-status"></div>
+    </section>
+    <section id="sp-manage" class="sp-panel">
+      <h2>Modify Existing Provider Services</h2>
+      <div class="form-group"><label for="sp-select-provider">Select Provider</label><select id="sp-select-provider"><option value="">Choose...</option><option value="demo-1">Demo Provider 1</option><option value="demo-2">Demo Provider 2</option></select></div>
+      <div id="sp-current-services" class="sp-current-services placeholder-text">Select a provider to view services.</div>
+      <form id="sp-update-form" class="sp-form" aria-hidden="true">
+        <div class="form-group"><label for="sp-update-services">Update Services (comma separated)</label><input id="sp-update-services" type="text" /></div>
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+        <button type="button" id="sp-remove-provider" class="btn btn-danger">Remove Provider</button>
+      </form>
+      <div id="sp-manage-status" class="sp-status"></div>
+    </section>
+  </div>
+</div>

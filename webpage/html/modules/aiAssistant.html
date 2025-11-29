@@ -1,0 +1,37 @@
+<!-- aiAssistant.html - Admin AI Assistant Settings View (renamed from security) -->
+<div class="ai-admin-view">
+  <h1>AI Assistant Admin Settings</h1>
+  <div class="ai-admin-layout">
+    <section class="ai-admin-projects">
+      <h2>Projects</h2>
+      <div class="ai-admin-projects-toolbar">
+        <button id="ai-refresh-projects" class="btn btn-secondary">Refresh</button>
+        <button id="ai-new-project-btn" class="btn btn-primary">New Project</button>
+      </div>
+      <ul id="ai-project-list" class="ai-project-list">
+        <li class="ai-project-item" data-project-id="demo-1">Demo Project 1</li>
+        <li class="ai-project-item" data-project-id="demo-2">Demo Project 2</li>
+        <li class="ai-project-item" data-project-id="demo-3">Demo Project 3</li>
+      </ul>
+    </section>
+    <section class="ai-admin-details">
+      <h2 id="ai-project-title">Select a project</h2>
+      <div id="ai-project-meta" class="ai-project-meta">
+        <p class="placeholder-text">Project metadata will appear here.</p>
+      </div>
+      <div class="ai-admin-actions">
+        <button id="ai-download-info" class="btn btn-secondary" disabled>Download Info</button>
+        <button id="ai-update-params" class="btn btn-primary" disabled>Update Parameters</button>
+        <button id="ai-remove-files" class="btn btn-danger" disabled>Remove Files</button>
+      </div>
+      <form id="ai-params-form" class="ai-params-form" aria-hidden="true">
+        <h3>Update Parameters</h3>
+        <div class="form-group"><label for="ai-param-temperature">Temperature</label><input id="ai-param-temperature" type="number" step="0.1" min="0" max="2" value="0.7" /></div>
+        <div class="form-group"><label for="ai-param-max-tokens">Max Tokens</label><input id="ai-param-max-tokens" type="number" min="128" max="8192" value="1024" /></div>
+        <div class="form-group"><label for="ai-param-top-p">Top P</label><input id="ai-param-top-p" type="number" step="0.05" min="0" max="1" value="0.95" /></div>
+        <button type="submit" class="btn btn-success">Save Parameters</button>
+      </form>
+      <div id="ai-admin-status" class="ai-admin-status"></div>
+    </section>
+  </div>
+</div>

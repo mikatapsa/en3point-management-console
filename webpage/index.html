@@ -1,5 +1,24 @@
 <!DOCTYPE html>
 <!--
+    New instuctions :
+    - AI assistant panes should not overlap with top bar/navigation
+    - Views container should be scrollable if content exceeds viewport height
+    - Name of AI assitant includes the subsection and has section related Questions for user
+    - AI assistant three most asked questions shall be selectable and auto-fill the input area
+    - AI assistant users most recent questions shall be listed on right side for quick re-asking and autofill
+    - AI assistant accepted instructions shall deep-link into views with parameters (e.g., tokenStudio
+        with token name/description to pre-fill)
+    - AI assisnta three most asked questions and recent questions shall be below discussion-left panel
+    - discuss with AI button shall be inside the input area, on the right side. it should be Square with chat icon only.
+    - deep-link instructions should appear under the AI response area as clickable links
+    - views container should have a class "scrollable" to enable independent scrolling
+    - discussion left and right panels should have same height. input area and response area should be same
+    - AI assistant should be part of topbar 
+    - AI assistant has differnt section based questions, e.g., tokenStudio, users, security, general
+
+    
+
+
     Top Bar & Navigation – UX notes
     - Top bar remains fixed/visible at all times; it must not scroll away
     - Left: logo; Center: app title; Right: current admin info + logout button
@@ -28,39 +47,64 @@
     <link rel="stylesheet" href="./css/modules/users.css" />
     <link rel="stylesheet" href="./css/modules/wallets.css" />
     <link rel="stylesheet" href="./css/modules/tokenStudio.css" />
-    <link rel="stylesheet" href="./css/modules/security.css" />
+    <link rel="stylesheet" href="./css/modules/aiAssistant.css" />
     <link rel="stylesheet" href="./css/modules/engagement.css" />
     <link rel="stylesheet" href="./css/modules/marketplace.css" />
     <link rel="stylesheet" href="./css/modules/distribution.css" />
     <link rel="stylesheet" href="./css/modules/tokeneditor.css" />
     <link rel="stylesheet" href="./css/modules/condition_builder.css" />
     <link rel="stylesheet" href="./css/modules/chart.css" />
-    <link rel="stylesheet" href="./css/modules/perspective.css" />
+    <link rel="stylesheet" href="./css/modules/service_provider.css" />
 </head>
 <body>
     <header class="top-bar">
-        <div class="logo-area">
-            <img src="./assets/media/en3point.png" alt="Logo" class="logo"/>
-            <span class="app-title">Management Console</span>
+        <div class="top-bar-main">
+            <div class="logo-area">
+                <img src="./assets/media/en3point.png" alt="Logo" class="logo"/>
+                <span class="app-title">Management Console</span>
+            </div>
+            <nav class="top-nav">
+            <button class="nav-btn" data-view="dashboard">Dashboard</button>
+            <button class="nav-btn" data-view="users">Users</button>
+            <button class="nav-btn" data-view="wallets">Wallets</button>
+            <button class="nav-btn" data-view="tokenStudio">Token Studio</button>
+            <button class="nav-btn" data-view="aiAdmin">AI Admin</button>
+            <button class="nav-btn" data-view="condition_builder">Condition_Builder</button>
+            <button class="nav-btn" data-view="chart">Chart</button>
+            <button class="nav-btn" data-view="service_provider">Service Provider</button>
+            </nav>
+            <div class="admin-info">
+                <span id="admin-identifier">User: dummy-admin</span>
+                <span id="admin-role">Role: Admin</span>
+                <button id="ai-toggle-btn" class="nav-btn" title="AI Assistant">🤖 AI</button>
+                <button id="logout-btn" class="nav-btn" title="Logout">Logout</button>
+            </div>
         </div>
-        <nav class="top-nav">
-        <button class="nav-btn" data-view="dashboard">Dashboard</button>
-        <button class="nav-btn" data-view="users">Users</button>
-        <button class="nav-btn" data-view="wallets">Wallets</button>
-        <button class="nav-btn" data-view="tokenStudio">Token Studio</button>
-        <button class="nav-btn" data-view="security">Security</button>
-        <button class="nav-btn" data-view="engagement">Engagement</button>
-        <button class="nav-btn" data-view="marketplace">Marketplace</button>
-        <button class="nav-btn" data-view="distribution">Distribution</button>
-        <button class="nav-btn" data-view="tokeneditor">Tokeneditor</button>
-        <button class="nav-btn" data-view="condition_builder">Condition_Builder</button>
-        <button class="nav-btn" data-view="chart">Chart</button>
-        <button class="nav-btn" data-view="perspective">Perspective</button>
-        </nav>
-        <div class="admin-info">
-            <span id="admin-identifier">User: dummy-admin</span>
-            <span id="admin-role">Role: Admin</span>
-            <button id="logout-btn" class="nav-btn" title="Logout">Logout</button>
+        <div id="ai-panel" class="ai-panel hidden">
+            <div class="discussion-left">
+                <h3 id="ai-section-title">AI Assistant - General</h3>
+                <div class="ai-input-wrapper">
+                    <textarea id="token-description-input" class="discussion-input" rows="4" placeholder="Describe your task or ask a question..."></textarea>
+                    <button id="discuss-token-btn" class="ai-chat-btn" title="Discuss">💬</button>
+                </div>
+                <div class="ai-suggestions">
+                    <h4>Common Questions</h4>
+                    <ul id="common-questions-list">
+                        <li class="question-item" data-question="How do I create a new token?">How do I create a new token?</li>
+                        <li class="question-item" data-question="How do I find a user by email?">How do I find a user by email?</li>
+                        <li class="question-item" data-question="How do I review security settings?">How do I review security settings?</li>
+                    </ul>
+                    <h4>Recent Questions</h4>
+                    <ul id="recent-questions-list"></ul>
+                </div>
+            </div>
+            <div class="discussion-right">
+                <h3>AI Response</h3>
+                <div id="ai-response" class="ai-response">
+                    <p class="placeholder-text">Ask me anything and I'll help you proceed.</p>
+                </div>
+                <div id="ai-deeplinks" class="ai-deeplinks"></div>
+            </div>
         </div>
     </header>
 
@@ -94,36 +138,7 @@
         </div>
     </div>
 
-    <!-- AI Assistant Toggle and Panel (placeholder; wiring in app.js) -->
-    <section class="ai-assistant">
-        <button id="ai-toggle-btn" class="nav-btn">AI Assistant</button>
-        <div id="ai-panel" class="ai-panel hidden">
-            <div class="ai-panel-left">
-                <h3>What do you want to do?</h3>
-                <textarea id="ai-task-input" rows="3" placeholder="Describe your task..."></textarea>
-                <div class="ai-suggestions">
-                    <div>
-                        <h4>Common actions</h4>
-                        <ul>
-                            <li>Create a new token</li>
-                            <li>Find a user by email</li>
-                            <li>Review security settings</li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h4>Recent questions</h4>
-                        <ul id="ai-recent-questions"></ul>
-                    </div>
-                </div>
-            </div>
-            <div class="ai-panel-right">
-                <h3>Assistant Response</h3>
-                <div id="ai-response-box" class="ai-response-box"></div>
-            </div>
-        </div>
-    </section>
-
-    <main id="views-container" class="view-content">
+    <main id="views-container" class="view-content scrollable">
         <!-- Dynamic view content loaded here -->
     </main>
 

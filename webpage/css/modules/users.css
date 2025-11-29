@@ -8,6 +8,13 @@
     height: calc(100vh - 120px);
     overflow: hidden;
 }
+.users-mode-selector { display:flex; gap:.5rem; flex-wrap:wrap; margin-bottom:12px; }
+.users-mode-btn { background:#202634; color:#f5f5f5; border:1px solid #202634; border-radius:20px; padding:.5rem 1rem; cursor:pointer; font-size:.8rem; }
+.users-mode-btn.active { background:#5F0AFF; border-color:#5F0AFF; }
+.users-onboard-panels { margin-top:20px; display:flex; flex-direction:column; gap:24px; }
+.users-onboard-form { background:#151827; border:1px solid #202634; border-radius:8px; padding:20px; display:flex; flex-direction:column; gap:1rem; }
+.users-onboard-status { min-height:20px; font-size:.75rem; color:#6b7280; }
+
 
 /* Left Panel - User List */
 .users-left-panel {

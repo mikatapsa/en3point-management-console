@@ -3,6 +3,8 @@
 
 We are using a SINGLE `index.html` as the shell, with view content loaded dynamically from separate HTML module files.
 Navigation loads HTML content from `html/modules/<name>.html` files into the main container.
+Check new instructions from the beginning of the file, once implemented move them into comment section.
+Check updates and clarification in existing instructions, implement as needed and modify comment after done.
 
 ## Project Structure
 
@@ -11,7 +13,7 @@ en3point-management-console/
 ├── .github/
 │   └── copilot-instructions.md    # This file
 ├── webpage/
-│   ├── index.html                 # Shell with header, nav, login modal, view container
+│   ├── index.html                 # Shell with header, AI panel, nav, login modal, view container
 │   ├── assets/
 │   │   └── media/
 │   │       ├── en3point.png       # Logo
@@ -19,83 +21,80 @@ en3point-management-console/
 │   ├── html/
 │   │   └── modules/               # View HTML content (loaded dynamically)
 │   │       ├── dashboard.html
-│   │       ├── users.html
+│   │       ├── users.html         # User management with mode selector
 │   │       ├── wallets.html
-│   │       ├── tokens.html
-│   │       ├── security.html
-│   │       ├── engagement.html
-│   │       ├── marketplace.html
-│   │       ├── distribution.html
-│   │       ├── tokeneditor.html
+│   │       ├── tokenStudio.html   # Token creator/finder/editor/minter with mode selector
+│   │       ├── aiAssistant.html   # AI project admin settings
 │   │       ├── condition_builder.html
 │   │       ├── chart.html
-│   │       └── perspective.html
+│   │       └── service_provider.html  # Service provider onboard/manage
 │   ├── css/
 │   │   ├── base.css               # Global resets, typography, dark theme
-│   │   ├── layout.css             # Top bar, nav, view system, login layout
+│   │   ├── layout.css             # Top bar, AI panel, nav, view system
 │   │   ├── theme.css              # Color scheme, variables
 │   │   ├── components.css         # Shared/global components (cards, buttons, forms, tables)
 │   │   └── modules/               # Module-specific styles (matches js/modules/)
 │   │       ├── dashboard.css
 │   │       ├── users.css
 │   │       ├── wallets.css
-│   │       ├── tokens.css
-│   │       ├── security.css
-│   │       ├── engagement.css
-│   │       ├── marketplace.css
-│   │       ├── distribution.css
-│   │       ├── tokeneditor.css
+│   │       ├── tokenStudio.css
+│   │       ├── aiAssistant.css
 │   │       ├── condition_builder.css
 │   │       ├── chart.css
-│   │       ├── perspective.css
+│   │       ├── service_provider.css
 │   │       └── login.css
 │   └── js/
-│       ├── app.js                 # Navigation system + HTML loading + viewInitializers
+│       ├── app.js                 # Navigation system + HTML loading + viewInitializers + AI assistant
+│       ├── en3point-backend.js    # Backend API integration (mock/real toggle)
 │       └── modules/
 │           ├── dashboard.js
 │           ├── users.js
 │           ├── wallets.js
-│           ├── tokens.js
-│           ├── security.js
-│           ├── engagement.js
-│           ├── marketplace.js
-│           ├── distribution.js
-│           ├── tokeneditor.js
+│           ├── tokenStudio.js
+│           ├── aiAssistant.js
 │           ├── condition_builder.js
 │           ├── chart.js
-│           ├── perspective.js
+│           ├── service_provider.js
 │           └── login.js
 ```
 
 ## Current Implementation Status
 
 ### ✅ Implemented
-- **Single-page shell**: `index.html` contains header, nav, login modal, and view container
+- **Single-page shell**: `index.html` contains header with AI panel, nav, login modal, and view container
 - **Modular HTML**: Each view in separate file (`html/modules/<name>.html`)
 - **Dynamic loading**: `app.js` fetches and injects HTML content on navigation
-- **Navigation system**: Top bar with 12 nav buttons + login modal
+- **Navigation system**: Top bar with 8 visible nav buttons (4 hidden: engagement, marketplace, distribution, tokeneditor)
+- **AI Assistant Panel**: Full-width panel (400px height) integrated into top-bar header
+  - Context-aware questions per view
+  - Recent questions in localStorage
+  - Deep-link support for navigation with parameters
+  - Toggle button in admin-info section
 - **CSS structure**: Modular organization matching JS/HTML structure
   - 4 base stylesheets (base, layout, theme, components)
-  - 12 module-specific CSS files in `css/modules/`
-  - 12 module-specific HTML files in `html/modules/`
-- **JS module scaffolding**: 13 module files in `js/modules/`
+  - 8 active module-specific CSS files in `css/modules/`
+  - 8 active module-specific HTML files in `html/modules/`
+- **JS module scaffolding**: 8 active module files in `js/modules/`
+- **Backend integration**: `en3point-backend.js` with mock/real mode toggle, URL selector
 - **Login system**: Full-screen modal with auth checking
 - **Dark theme**: Base styling with dark background (#0b0c10), light text
 - **Logo integration**: en3point.png in top bar
 
-### 12 Views (Modular HTML Files)
+### 8 Active Views (Modular HTML Files)
 1. **dashboard** – Main overview (default view)
-2. **users** – User management
+2. **users** – User management with 4 modes: find user, onboard user, onboard admin, onboard member
 3. **wallets** – Wallet operations
-4. **tokens** – Token management
-5. **security** – Security settings
-6. **engagement** – Engagement analytics
-7. **marketplace** – Marketplace management
-8. **distribution** – Distribution tools
-9. **tokeneditor** – Token editor interface
-10. **condition_builder** – Condition builder UI
-11. **chart** – Chart/analytics view
-12. **perspective** – Perspective management
+4. **tokenStudio** – Token management with 4 modes: creator, finder, editor, minter
+5. **aiAdmin** – AI project admin settings (renamed from security)
+6. **condition_builder** – Condition builder UI
+7. **chart** – Chart/analytics view
+8. **service_provider** – Service provider management with 2 modes: onboard, manage (renamed from perspective)
+
+### Hidden Views (Not in Top Nav)
+- **engagement** – Engagement analytics (hidden)
+- **marketplace** – Marketplace management (hidden)
+- **distribution** – Distribution tools (hidden)
+- **tokeneditor** – Token editor interface (hidden, functionality in tokenStudio)
 
 Note: Login is a modal overlay, not a separate view.
 
