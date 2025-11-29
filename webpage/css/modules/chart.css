@@ -1,0 +1,23 @@
+/* chart.css - Chart view styles */
+
+.chart-container {
+    background: #151827;
+    border: 1px solid #202634;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.chart-canvas {
+    width: 100%;
+    height: 400px;
+}
+
+.chart-legend {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+/* Add chart-specific styles here */

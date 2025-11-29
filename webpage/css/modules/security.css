@@ -1,0 +1,16 @@
+/* security.css - Security view styles */
+
+.security-section {
+    background: #151827;
+    border: 1px solid #202634;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.security-section h3 {
+    color: #5F0AFF;
+    margin-top: 0;
+}
+
+/* Add security-specific styles here */

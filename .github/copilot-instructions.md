@@ -20,11 +20,25 @@ en3point-management-console/
 │   │   ├── base.css               # Global resets, typography, dark theme
 │   │   ├── layout.css             # Top bar, nav, view system, login layout
 │   │   ├── theme.css              # Color scheme, variables
-│   │   └── components.css         # Reusable UI components
+│   │   ├── components.css         # Shared/global components (cards, buttons, forms, tables)
+│   │   └── modules/               # Module-specific styles (matches js/modules/)
+│   │       ├── dashboard.css
+│   │       ├── users.css
+│   │       ├── wallets.css
+│   │       ├── tokens.css
+│   │       ├── security.css
+│   │       ├── engagement.css
+│   │       ├── marketplace.css
+│   │       ├── distribution.css
+│   │       ├── tokeneditor.css
+│   │       ├── condition_builder.css
+│   │       ├── chart.css
+│   │       ├── perspective.css
+│   │       └── login.css
 │   └── js/
 │       ├── app.js                 # Navigation system + viewInitializers
 │       └── modules/
-│           ├── dashboard.js       # Module files exist (placeholders)
+│           ├── dashboard.js
 │           ├── users.js
 │           ├── wallets.js
 │           ├── tokens.js
@@ -43,10 +57,13 @@ en3point-management-console/
 
 ### ✅ Implemented
 - **Single-page architecture**: All 13 views in one `index.html`
-- **Navigation system**: Top bar with 12 nav buttons + login view
+- **Navigation system**: Top bar with 12 nav buttons + login modal
 - **View switching**: `showView(name)` toggles `.active` class
-- **CSS structure**: 4 organized stylesheets (base, layout, theme, components)
-- **Module scaffolding**: 13 module files in `js/modules/` (ready for code migration)
+- **CSS structure**: Modular organization matching JS structure
+  - 4 base stylesheets (base, layout, theme, components)
+  - 13 module-specific CSS files in `css/modules/`
+- **JS module scaffolding**: 13 module files in `js/modules/`
+- **Login system**: Full-screen modal with auth checking
 - **Dark theme**: Base styling with dark background (#0b0c10), light text
 - **Logo integration**: en3point.png in top bar
 
@@ -120,14 +137,20 @@ en3point-management-console/
          dashboard: () => import("./modules/dashboard.js").then(m => m.init && m.init()),
          users: () => import("./modules/users.js").then(m => m.init && m.init()),
          // ... etc
-     };
-     ```
-
 5. **CSS organization**
    - **`base.css`**: Global resets, typography, body styles
    - **`layout.css`**: Top bar, navigation, view system, structural layouts
    - **`theme.css`**: Color scheme, CSS variables, theming
-   - **`components.css`**: Reusable UI components (cards, forms, tables)
+   - **`components.css`**: Shared/global components (cards, buttons, forms, tables, grids)
+   - **`css/modules/<name>.css`**: Module-specific styles matching `js/modules/<name>.js`
+   - **Modular pattern**: Each view has its own CSS file in `css/modules/`
+     - `css/modules/login.css` → Login modal styles
+     - `css/modules/dashboard.css` → Dashboard-specific styles
+     - `css/modules/users.css` → Users view styles
+     - etc.
+   - **Naming convention**: Prefix classes with module name
+     - `.dashboard-card`, `.users-list`, `.tokens-table`, `.login-modal`
+   - **All module CSS files are loaded in `index.html`** - no dynamic loading needed
    - **View-specific styles**: Add to `components.css` with prefixed class names:
      - `.dashboard-card`, `.users-list`, `.tokens-table`
    - **Do not create separate view CSS files** unless view is highly complex

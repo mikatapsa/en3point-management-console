@@ -1,0 +1,26 @@
+/* tokeneditor.css - Token Editor view styles */
+
+.tokeneditor-workspace {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 20px;
+    height: calc(100vh - 100px);
+}
+
+.tokeneditor-sidebar {
+    background: #151827;
+    border: 1px solid #202634;
+    border-radius: 8px;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.tokeneditor-canvas {
+    background: #151827;
+    border: 1px solid #202634;
+    border-radius: 8px;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+/* Add tokeneditor-specific styles here */

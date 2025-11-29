@@ -1,0 +1,16 @@
+/* wallets.css - Wallets view styles */
+
+.wallets-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.wallet-card {
+    background: #151827;
+    border: 1px solid #202634;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+/* Add wallets-specific styles here */

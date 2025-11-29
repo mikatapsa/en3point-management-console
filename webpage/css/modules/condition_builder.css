@@ -1,0 +1,22 @@
+/* condition_builder.css - Condition Builder view styles */
+
+.condition-builder-container {
+    background: #151827;
+    border: 1px solid #202634;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.condition-rule {
+    background: #0b0c10;
+    border: 1px solid #202634;
+    border-radius: 6px;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+
+.condition-rule:hover {
+    border-color: #5F0AFF;
+}
+
+/* Add condition_builder-specific styles here */

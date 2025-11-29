@@ -1,0 +1,17 @@
+/* distribution.css - Distribution view styles */
+
+.distribution-panel {
+    background: #151827;
+    border: 1px solid #202634;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.distribution-controls {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+/* Add distribution-specific styles here */

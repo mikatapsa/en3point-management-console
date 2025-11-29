@@ -1,191 +1,123 @@
 /* components.css – shared component styles */
-/* extend as you migrate real components */
+/* Module-specific styles have been moved to css/modules/ */
+/* This file is for truly shared/global components only */
 
-/* ============================================
-   LOGIN MODAL - Full-screen overlay login
-   ============================================ */
-.login-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: 1000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.login-modal.hidden {
-    display: none;
-}
-
-.login-modal-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: url('../assets/media/loginbackground.png') no-repeat center center/cover;
-    z-index: -2;
-    opacity: 0.5;
-}
-
-.login-modal-overlay::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(128, 128, 128, 0.5);
-    z-index: -1;
-}
-
-.login-modal-content {
-    background-color: #000;
-    width: 90%;
-    max-width: 400px;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
-    text-align: center;
-    border: 2px solid #5F0AFF;
-    box-shadow: 0 0 15px #5F0AFF;
-    position: relative;
-    z-index: 1;
-}
-
-.login-modal-content h2 {
-    margin: 0 0 20px;
-    color: #f5f5f5;
-    font-size: 1.5rem;
-}
-
-.login-modal-content h3 {
-    margin: 0 0 15px;
-    color: #d0d0d0;
-    font-size: 1.1rem;
-}
-
-/* Carousel for provider selection */
-.carousel-container {
-    margin-bottom: 25px;
-}
-
-.carousel {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    flex-wrap: wrap;
-}
-
-.carousel-item {
-    flex: 0 0 auto;
-    padding: 10px;
-    background: #202634;
+/* Shared card styles */
+.card {
+    background: #151827;
+    border: 1px solid #202634;
     border-radius: 8px;
+    padding: 20px;
+    transition: border-color 0.2s ease;
+}
+
+.card:hover {
+    border-color: #5F0AFF;
+}
+
+/* Shared button styles */
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
     cursor: pointer;
-    transition: all 0.3s ease;
-    border: 2px solid #5F0AFF;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
 }
 
-.carousel-item:hover {
-    background: #2a3244;
-    transform: scale(1.05);
-}
-
-.carousel-item.selected {
+.btn-primary {
     background: #5F0AFF;
-    border-color: #8a4fff;
-    transform: scale(1.1);
-    box-shadow: 0 0 10px #5F0AFF;
+    color: white;
 }
 
-.carousel-item img {
-    width: 100px;
-    height: 50px;
-    object-fit: contain;
+.btn-primary:hover {
+    background: #7a2fff;
+}
+
+.btn-secondary {
+    background: #202634;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: #2a3244;
+}
+
+/* Shared form styles */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
     display: block;
-}
-
-/* Login form styles */
-#login-form {
-    margin: 0;
-}
-
-#login-form label {
-    display: block;
-    text-align: left;
-    color: #f5f5f5;
     margin-bottom: 6px;
+    color: #f5f5f5;
     font-size: 0.9rem;
 }
 
-#login-form input {
+.form-group input,
+.form-group textarea,
+.form-group select {
     width: 100%;
-    padding: 12px;
-    margin-bottom: 18px;
+    padding: 10px;
     border: 1px solid #444;
     border-radius: 6px;
-    font-size: 14px;
     background: #151827;
     color: #f5f5f5;
+    font-size: 0.9rem;
     box-sizing: border-box;
 }
 
-#login-form input:focus {
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
     outline: none;
     border-color: #5F0AFF;
     box-shadow: 0 0 5px rgba(95, 10, 255, 0.3);
 }
 
-#login-button {
+/* Shared table styles */
+.data-table {
     width: 100%;
+    border-collapse: collapse;
+    background: #151827;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.data-table th,
+.data-table td {
     padding: 12px;
-    background: #5F0AFF;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 1rem;
-    font-weight: bold;
-    transition: background 0.3s ease;
+    text-align: left;
+    border-bottom: 1px solid #202634;
 }
 
-#login-button:hover:not(:disabled) {
-    background: #7a2fff;
-}
-
-#login-button:disabled {
-    background: #3a0a7f;
-    cursor: not-allowed;
-    opacity: 0.7;
-}
-
-.login-error-message {
-    margin-bottom: 15px;
-    padding: 10px;
-    color: #ff4444;
-    background: rgba(255, 68, 68, 0.1);
-    border: 1px solid #ff4444;
-    border-radius: 6px;
-    font-size: 14px;
-    display: none;
-}
-
-.reset-password {
-    margin-top: 15px;
-}
-
-.reset-password a {
+.data-table th {
+    background: #202634;
     color: #5F0AFF;
-    text-decoration: none;
-    font-size: 14px;
-    transition: color 0.2s ease;
+    font-weight: bold;
 }
 
-.reset-password a:hover {
-    color: #8a4fff;
-    text-decoration: underline;
+.data-table tr:hover {
+    background: rgba(95, 10, 255, 0.05);
 }
+
+/* Shared grid layouts */
+.grid-2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.grid-3 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.grid-4 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+

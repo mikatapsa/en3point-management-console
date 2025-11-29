@@ -1,0 +1,16 @@
+/* dashboard.css - Dashboard view styles */
+
+.dashboard-card {
+    background: #151827;
+    border: 1px solid #202634;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.dashboard-card h2 {
+    margin-top: 0;
+    color: #5F0AFF;
+}
+
+/* Add dashboard-specific styles here */

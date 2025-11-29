@@ -1,0 +1,24 @@
+/* tokens.css - Tokens view styles */
+
+.tokens-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #151827;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.tokens-table th,
+.tokens-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #202634;
+}
+
+.tokens-table th {
+    background: #202634;
+    color: #5F0AFF;
+    font-weight: bold;
+}
+
+/* Add tokens-specific styles here */
