@@ -1,9 +1,23 @@
 <!DOCTYPE html>
+<!--
+    Top Bar & Navigation – UX notes
+    - Top bar remains fixed/visible at all times; it must not scroll away
+    - Left: logo; Center: app title; Right: current admin info + logout button
+    - Logout clears session/local data and returns to login modal
+    - Navigation spans the full width and switches views via data-view buttons
+
+    AI Assistant panel (future):
+    - Toggle from a button below the navigation bar
+    - Left: user task input + common questions + recent questions
+    - Right: AI responses, either plain text or actionable instructions
+    - Accepted instructions can deep-link into views (e.g., tokenStudio) with parameters
+-->
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Management Console (Unified SPA)</title>
+    <link rel="icon" type="image/png" href="./assets/media/en3point.png" />
     <link rel="stylesheet" href="./css/base.css" />
     <link rel="stylesheet" href="./css/layout.css" />
     <link rel="stylesheet" href="./css/theme.css" />
@@ -13,7 +27,7 @@
     <link rel="stylesheet" href="./css/modules/dashboard.css" />
     <link rel="stylesheet" href="./css/modules/users.css" />
     <link rel="stylesheet" href="./css/modules/wallets.css" />
-    <link rel="stylesheet" href="./css/modules/tokens.css" />
+    <link rel="stylesheet" href="./css/modules/tokenStudio.css" />
     <link rel="stylesheet" href="./css/modules/security.css" />
     <link rel="stylesheet" href="./css/modules/engagement.css" />
     <link rel="stylesheet" href="./css/modules/marketplace.css" />
@@ -33,7 +47,7 @@
         <button class="nav-btn" data-view="dashboard">Dashboard</button>
         <button class="nav-btn" data-view="users">Users</button>
         <button class="nav-btn" data-view="wallets">Wallets</button>
-        <button class="nav-btn" data-view="tokens">Tokens</button>
+        <button class="nav-btn" data-view="tokenStudio">Token Studio</button>
         <button class="nav-btn" data-view="security">Security</button>
         <button class="nav-btn" data-view="engagement">Engagement</button>
         <button class="nav-btn" data-view="marketplace">Marketplace</button>
@@ -46,6 +60,7 @@
         <div class="admin-info">
             <span id="admin-identifier">User: dummy-admin</span>
             <span id="admin-role">Role: Admin</span>
+            <button id="logout-btn" class="nav-btn" title="Logout">Logout</button>
         </div>
     </header>
 
@@ -78,6 +93,35 @@
             </form>
         </div>
     </div>
+
+    <!-- AI Assistant Toggle and Panel (placeholder; wiring in app.js) -->
+    <section class="ai-assistant">
+        <button id="ai-toggle-btn" class="nav-btn">AI Assistant</button>
+        <div id="ai-panel" class="ai-panel hidden">
+            <div class="ai-panel-left">
+                <h3>What do you want to do?</h3>
+                <textarea id="ai-task-input" rows="3" placeholder="Describe your task..."></textarea>
+                <div class="ai-suggestions">
+                    <div>
+                        <h4>Common actions</h4>
+                        <ul>
+                            <li>Create a new token</li>
+                            <li>Find a user by email</li>
+                            <li>Review security settings</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>Recent questions</h4>
+                        <ul id="ai-recent-questions"></ul>
+                    </div>
+                </div>
+            </div>
+            <div class="ai-panel-right">
+                <h3>Assistant Response</h3>
+                <div id="ai-response-box" class="ai-response-box"></div>
+            </div>
+        </div>
+    </section>
 
     <main id="views-container" class="view-content">
         <!-- Dynamic view content loaded here -->

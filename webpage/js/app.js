@@ -3,11 +3,14 @@
 const buttons = document.querySelectorAll(".nav-btn");
 const viewsContainer = document.getElementById("views-container");
 let currentView = null;
+const logoutBtn = document.getElementById("logout-btn");
+const aiToggleBtn = document.getElementById("ai-toggle-btn");
+const aiPanel = document.getElementById("ai-panel");
 
 // map of init functions per view (to be filled as you migrate logic)
 const viewInitializers = {
     users: () => import("./modules/users.js").then(m => m.init && m.init()),
-    tokens: () => import("./modules/tokens.js").then(m => m.init && m.init()),
+    tokenStudio: () => import("./modules/tokenStudio.js").then(m => m.init && m.init()),
     // dashboard: () => import("./modules/dashboard.js").then(m => m.init && m.init()),
 };
 
@@ -79,6 +82,22 @@ function hideLoginModal() {
 window.hideLoginModal = hideLoginModal;
 window.showLoginModal = showLoginModal;
 
+// Logout behavior: clear session/local data and show login
+function logout() {
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("userid");
+    localStorage.removeItem("walletAddress");
+    localStorage.removeItem("adminData");
+    localStorage.removeItem("loginStatus");
+    showLoginModal();
+}
+
+// AI Assistant toggle
+function toggleAIPanel() {
+    if (!aiPanel) return;
+    aiPanel.classList.toggle("hidden");
+}
+
 // top nav events
 buttons.forEach(btn => {
     btn.addEventListener("click", () => {
@@ -86,6 +105,10 @@ buttons.forEach(btn => {
         showView(view);
     });
 });
+
+// Wire logout and AI toggle
+if (logoutBtn) logoutBtn.addEventListener("click", logout);
+if (aiToggleBtn) aiToggleBtn.addEventListener("click", toggleAIPanel);
 
 // Check auth on startup
 if (checkAuth()) {

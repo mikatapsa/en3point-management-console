@@ -1,4 +1,4 @@
-// modules/tokens.js - Token Studio functionality
+// modules/tokenStudio.js - Token Studio functionality
 
 import { getWallets } from '../en3point-backend.js';
 

@@ -6,11 +6,22 @@
     background: #151827;
     color: #fff;
     padding: 10px 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
 }
 .logo-area {
     display: flex;
     align-items: center;
     gap: 10px;
+}
+.app-title {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-weight: 600;
 }
 .logo {
     width: 32px;
@@ -20,6 +31,8 @@
     display: flex;
     gap: 8px;
     flex-wrap: wrap;
+    width: 100%;
+    justify-content: center;
 }
 .nav-btn {
     border: none;
@@ -35,6 +48,7 @@
 }
 #views-container {
     padding: 16px;
+    margin-top: 72px; /* avoid overlap with fixed top bar */
 }
 .view-content {
     /* Dynamic content container */
@@ -42,6 +56,34 @@
 }
 .hidden {
     display: none;
+}
+
+/* AI Assistant panel */
+.ai-assistant { padding: 8px 16px; }
+.ai-panel {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    background: #151827;
+    border-radius: 12px;
+    padding: 16px;
+    margin-top: 8px;
+}
+.ai-panel-left textarea {
+    width: 100%;
+    padding: 8px;
+    background: #0b0c10;
+    border: 1px solid #202634;
+    border-radius: 8px;
+    color: #f5f5f5;
+}
+.ai-response-box {
+    min-height: 140px;
+    background: #0b0c10;
+    border: 1px solid #202634;
+    border-radius: 8px;
+    padding: 12px;
+    color: #f5f5f5;
 }
 .login-screen {
     max-width: 420px;

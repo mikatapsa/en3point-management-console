@@ -63,7 +63,8 @@ function renderUserList() {
 // Select and display user details
 function selectUser(userId) {
     selectedUserId = userId;
-    const user = mockUsers.find(u => u.id === userId);
+    // Use loaded users array from backend (mockUsers deprecated)
+    const user = allUsers.find(u => u.id === userId);
     
     if (!user) return;
     
@@ -143,42 +144,38 @@ function handleSearch(query) {
     detailContainer.innerHTML = '<div class="users-detail-empty"><p>Select a user to view details</p></div>';
 }
 
-// Initialize users view
-export function init() {
+// Initialize users view - load data and setup UI
+export async function init() {
     console.log("Initializing users view");
     
-    // Reset state
-    currentTag = "all";
-    currentSearch = "";
-    selectedUserId = null;
-    
-    // Set up tag selector
-    document.querySelectorAll('.users-tag').forEach(btn => {
-        btn.addEventListener('click', () => {
-            handleTagSelection(btn.dataset.tag);
-        });
-    });
-    
-    // Set up search
-    const searchInput = document.getElementById('users-search-input');
-    if (searchInput) {
-        searchInput.addEventListener('input', (e) => {
-            handleSearch(e.target.value);
-        });
-    }
-    
-    // Initial render
-    renderUserList();
-}
-
-// Initialize view - load users from backend
-export async function init() {
     try {
         // Load users from backend
-        allUsers = await getUsers();
+        const response = await getUsers();
+        allUsers = response.data || [];
         
-        // Setup UI
-        setupUI();
+        // Reset state
+        currentTag = "all";
+        currentSearch = "";
+        selectedUserId = null;
+        
+        // Set up tag selector
+        document.querySelectorAll('.users-tag').forEach(btn => {
+            btn.addEventListener('click', () => {
+                handleTagSelection(btn.dataset.tag);
+            });
+        });
+        
+        // Set up search
+        const searchInput = document.getElementById('users-search-input');
+        if (searchInput) {
+            searchInput.addEventListener('input', (e) => {
+                handleSearch(e.target.value);
+            });
+        }
+        
+        // Initial render
+        renderUserList();
+        
     } catch (error) {
         console.error('Failed to load users:', error);
         const detailPanel = document.querySelector('.users-detail-panel');

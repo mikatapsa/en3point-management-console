@@ -1,4 +1,4 @@
-/* tokens.css - Token Studio styles */
+/* tokenStudio.css - Token Studio styles */
 
 .token-studio {
     padding: 1rem;
@@ -392,16 +392,20 @@
     border: 2px solid #202634;
     border-radius: 12px;
     overflow: hidden;
+    padding: 1rem;
 }
 
 .preview-image {
-    width: 100%;
-    aspect-ratio: 1;
+    width: 100px;
+    height: 100px;
     background: #202634;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-bottom: 2px solid #202634;
+    border: 2px solid #202634;
+    border-radius: 8px;
+    float: left;
+    margin-right: 1rem;
 }
 
 .image-placeholder {
@@ -424,7 +428,8 @@
 }
 
 .preview-details {
-    padding: 1.5rem;
+    padding: 0;
+    overflow: hidden; /* clear float */
 }
 
 .preview-details h3 {
@@ -442,7 +447,7 @@
 
 .preview-description {
     color: #6b7280;
-    margin: 1rem 0;
+    margin: 0.5rem 0 1rem 0;
     line-height: 1.6;
 }
 
