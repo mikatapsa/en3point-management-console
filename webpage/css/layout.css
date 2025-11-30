@@ -37,18 +37,34 @@
     flex-wrap: wrap;
     width: 100%;
     justify-content: center;
+    align-items: stretch;
+    padding: 6px 20px 10px 20px;
+    border-top: 1px solid #202634;
 }
 .nav-btn {
     border: none;
     background: #202634;
     color: #fff;
-    padding: 6px 12px;
+    padding: 6px 14px;
     border-radius: 16px;
     cursor: pointer;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
+    flex: 0 0 auto;
+    white-space: nowrap;
+    line-height: 1.2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 34px;
 }
 .nav-btn.active {
     background: #5F0AFF;
+}
+@media (max-width: 920px) {
+    .nav-btn { font-size: 0.8rem; padding: 6px 12px; }
+}
+@media (max-width: 640px) {
+    .nav-btn { font-size: 0.75rem; padding: 5px 10px; }
 }
 .admin-info {
     display: flex;

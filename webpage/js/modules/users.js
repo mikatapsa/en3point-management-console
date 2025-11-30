@@ -69,7 +69,9 @@ function selectUser(userId) {
     if (!user) return;
     
     const detailContainer = document.getElementById("users-detail-container");
-    
+    // Mock owned tokens for demo purposes (would come from backend later)
+    const ownedTokens = generateMockTokensForUser(user);
+
     detailContainer.innerHTML = `
         <div class="users-detail-card">
             <div class="users-detail-header">
@@ -79,23 +81,19 @@ function selectUser(userId) {
                     <p>${user.email}</p>
                 </div>
             </div>
-            
             <div class="users-detail-info">
                 <div class="users-detail-field">
                     <div class="users-detail-field-label">User ID</div>
                     <div class="users-detail-field-value">#${user.id}</div>
                 </div>
-                
                 <div class="users-detail-field">
                     <div class="users-detail-field-label">Group</div>
                     <div class="users-detail-field-value">${user.group}</div>
                 </div>
-                
                 <div class="users-detail-field">
                     <div class="users-detail-field-label">Wallet Address</div>
                     <div class="users-detail-field-value">${user.walletAddress}</div>
                 </div>
-                
                 <div class="users-detail-field">
                     <div class="users-detail-field-label">Tags</div>
                     <div class="users-detail-tags">
@@ -103,16 +101,104 @@ function selectUser(userId) {
                     </div>
                 </div>
             </div>
-            
+            <div class="users-token-section">
+                <h3 class="users-token-section-title">Owned Tokens</h3>
+                <div id="users-token-grid" class="users-token-grid">
+                    ${ownedTokens.map(t => tokenCardMarkup(t)).join('')}
+                </div>
+            </div>
             <div class="users-detail-actions">
                 <button class="btn btn-primary" onclick="alert('Edit user functionality coming soon')">Edit User</button>
                 <button class="btn btn-secondary" onclick="alert('Delete user functionality coming soon')">Delete User</button>
             </div>
         </div>
     `;
+
+    // Wire token card clicks to open modal
+    document.querySelectorAll('.users-token-card').forEach(card => {
+        card.addEventListener('click', () => {
+            const symbol = card.getAttribute('data-symbol');
+            const token = ownedTokens.find(t => t.symbol === symbol);
+            if (token) openTokenModal(token, user);
+        });
+    });
     
     // Update active state in list
     renderUserList();
+}
+
+// Generate mock tokens (placeholder until backend integration)
+function generateMockTokensForUser(user) {
+    const base = user.id % 3 + 3; // 3–5 tokens
+    const samples = [
+        { name: 'Reward Points', symbol: 'RWD', type: 'ERC20', supply: '1,000,000', desc: 'Loyalty reward token' },
+        { name: 'Access Pass', symbol: 'PASS', type: 'ERC721', supply: '500', desc: 'Membership NFT pass' },
+        { name: 'Voucher Credit', symbol: 'VCHR', type: 'ERC20', supply: '250,000', desc: 'Voucher credit token' },
+        { name: 'Engagement Badge', symbol: 'BADGE', type: 'ERC1155', supply: '10,000', desc: 'Engagement multi-token' },
+        { name: 'Legacy Point', symbol: 'LGPT', type: 'ERC20', supply: '5,000,000', desc: 'Legacy points' }
+    ];
+    return samples.slice(0, base);
+}
+
+function tokenCardMarkup(t) {
+    return `
+        <div class="users-token-card" data-symbol="${t.symbol}" tabindex="0" role="button" aria-label="View token ${t.name}">
+            <div class="users-token-card-header">
+                <span class="users-token-symbol">${t.symbol}</span>
+                <span class="users-token-type">${t.type}</span>
+            </div>
+            <div class="users-token-name">${t.name}</div>
+            <div class="users-token-supply">Supply: ${t.supply}</div>
+        </div>
+    `;
+}
+
+// Token detail modal
+function openTokenModal(token, user) {
+    closeTokenModal(); // ensure single instance
+    const modal = document.createElement('div');
+    modal.className = 'users-token-modal-overlay';
+    modal.innerHTML = `
+        <div class="users-token-modal" role="dialog" aria-modal="true" aria-label="Token ${token.name} details">
+            <div class="users-token-modal-header">
+                <h2>${token.name} <span class="modal-symbol">(${token.symbol})</span></h2>
+                <button class="users-token-modal-close" aria-label="Close token details">×</button>
+            </div>
+            <div class="users-token-modal-body">
+                <div class="users-token-modal-props">
+                    <div><strong>Type:</strong> ${token.type}</div>
+                    <div><strong>Supply:</strong> ${token.supply}</div>
+                    <div><strong>Owner Wallet:</strong> ${user.walletAddress}</div>
+                    <div><strong>Description:</strong> ${token.desc}</div>
+                </div>
+                <div class="users-token-modal-actions">
+                    <button class="btn btn-primary" data-deeplink-mode="editor">Open in Editor</button>
+                    <button class="btn btn-secondary" data-deeplink-mode="distribution">View Distribution</button>
+                </div>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(modal);
+
+    modal.querySelector('.users-token-modal-close').addEventListener('click', closeTokenModal);
+    modal.addEventListener('click', (e) => { if (e.target === modal) closeTokenModal(); });
+    modal.querySelectorAll('[data-deeplink-mode]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const mode = btn.getAttribute('data-deeplink-mode');
+            localStorage.setItem('tokenStudioMode', mode);
+            localStorage.setItem('tokenStudioTokenSymbol', token.symbol);
+            // Navigate via existing deep-link helper
+            if (window.aiDeepLink) {
+                window.aiDeepLink('tokenStudio');
+            }
+            closeTokenModal();
+        });
+    });
+}
+
+function closeTokenModal() {
+    const existing = document.querySelector('.users-token-modal-overlay');
+    if (existing) existing.remove();
 }
 
 // Handle tag selection

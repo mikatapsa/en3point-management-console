@@ -18,6 +18,8 @@ let tokenData = {
     decimals: 18,
     customProperties: [],
     generatedProperties: [],
+    standardFeatures: [],
+    configCustomProperties: [],
     blockchain: 'ethereum',
     walletAddress: '',
     mintQuantity: ''
@@ -69,6 +71,20 @@ export async function init() {
     
     // Update preview
     updatePreview();
+
+    // Deep-link activation (from Users view modal)
+    const storedMode = localStorage.getItem('tokenStudioMode');
+    if (storedMode) {
+        const btn = document.querySelector(`.mode-btn[data-mode="${storedMode}"]`);
+        btn?.click();
+        localStorage.removeItem('tokenStudioMode');
+    }
+    const storedSymbol = localStorage.getItem('tokenStudioTokenSymbol');
+    if (storedSymbol) {
+        console.log('Deep-linked token symbol:', storedSymbol);
+        // Future: auto-populate finder/editor selection
+        localStorage.removeItem('tokenStudioTokenSymbol');
+    }
 }
 
 // Mode Selector
@@ -105,6 +121,7 @@ async function loadTokenConfig() {
         populateBusinessTypes();
         renderCustomPropertiesConfig();
         attachBusinessTypeHandler();
+        attachConfigListeners();
     } catch (err) {
         console.error('Error loading token config:', err);
     }
@@ -133,12 +150,14 @@ function renderStandardFeatures(type) {
         return;
     }
     container.innerHTML = features.map(key => featureConfigRow(key)).join('');
+    attachConfigListeners();
 }
 
 function renderCustomPropertiesConfig() {
     const container = document.getElementById('custom-properties-config-list');
     if (!container || !tokenConfig?.customProperties) return;
     container.innerHTML = tokenConfig.customProperties.map(p => propertyConfigRow(p)).join('');
+    attachConfigListeners();
 }
 
 function featureConfigRow(key) {
@@ -163,7 +182,7 @@ function featureConfigRow(key) {
 function propertyConfigRow(p) {
     const control = propertyControl(p);
     return `
-        <div class="feature-row" data-key="${p.key}">
+        <div class="feature-row config-card" data-key="${p.key}">
             <div class="feature-main">
                 <label class="feature-label">${p.label}</label>
                 <div class="feature-control">${control}</div>
@@ -214,6 +233,8 @@ function resetTokenData() {
         decimals: 18,
         customProperties: [],
         generatedProperties: [],
+        standardFeatures: [],
+        configCustomProperties: [],
         blockchain: 'ethereum',
         walletAddress: '',
         mintQuantity: ''
@@ -601,6 +622,8 @@ function updatePreview() {
         { key: 'Type', value: tokenData.type },
         { key: 'Supply', value: tokenData.supply || 'Not set' },
         { key: 'Decimals', value: tokenData.decimals },
+        ...tokenData.standardFeatures.filter(f => f.enabled).map(f => ({ key: f.key, value: f.description || 'enabled' })),
+        ...tokenData.configCustomProperties.map(p => ({ key: p.key, value: p.value || p.description || '(configured)' })),
         ...tokenData.customProperties.filter(p => p.key && p.value).map(p => ({ key: p.key, value: p.value })),
         ...tokenData.generatedProperties.filter(p => p.accepted).map(p => ({ key: p.key, value: p.value }))
     ];
@@ -802,5 +825,49 @@ function setupDistributionMode() {
             }
         });
     }
+}
+
+
+// Configuration listeners
+function attachConfigListeners() {
+    const stdRows = document.querySelectorAll('#standard-feature-list .feature-row');
+    const customRows = document.querySelectorAll('#custom-properties-config-list .feature-row');
+    [...stdRows, ...customRows].forEach(r => {
+        r.querySelectorAll('.feature-enable, .feature-visibility, .feature-desc, [data-prop]').forEach(el => {
+            el.addEventListener('change', collectConfiguredData);
+            el.addEventListener('input', collectConfiguredData);
+        });
+    });
+    collectConfiguredData();
+}
+
+function collectConfiguredData() {
+    // Standard features
+    const stdRows = document.querySelectorAll('#standard-feature-list .feature-row');
+    tokenData.standardFeatures = Array.from(stdRows).map(r => {
+        const key = r.getAttribute('data-key');
+        const enabled = r.querySelector('.feature-enable')?.checked || false;
+        const visibility = r.querySelector('.feature-visibility')?.value || 'public';
+        const description = r.querySelector('.feature-desc')?.value.trim() || '';
+        return { key, enabled, visibility, description };
+    }).filter(f => f.enabled || f.description);
+
+    // Custom configured properties
+    const customRows = document.querySelectorAll('#custom-properties-config-list .feature-row');
+    tokenData.configCustomProperties = Array.from(customRows).map(r => {
+        const key = r.getAttribute('data-key');
+        const inputEl = r.querySelector('[data-prop]');
+        let value = '';
+        if (inputEl) {
+            if (inputEl.type === 'checkbox') value = inputEl.checked ? 'true' : 'false';
+            else value = inputEl.value.trim();
+        }
+        const visibility = r.querySelector('.feature-visibility')?.value || 'public';
+        const description = r.querySelector('.feature-desc')?.value.trim() || '';
+        if (value || description) r.classList.add('value-set'); else r.classList.remove('value-set');
+        return { key, value, visibility, description };
+    }).filter(p => p.value || p.description);
+
+    updatePreview();
 }
 

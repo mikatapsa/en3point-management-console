@@ -97,13 +97,17 @@
 
 /* Feature configuration rows */
 .feature-list { display: flex; flex-direction: column; gap: 0.75rem; }
-.feature-row { background:#0b0c10; border:1px solid #202634; border-radius:8px; padding:0.75rem; display:flex; flex-direction:column; gap:0.5rem; }
+.feature-row { background:#0b0c10; border:1px solid #202634; border-radius:8px; padding:0.75rem; display:flex; flex-direction:column; gap:0.5rem; transition:border .2s, background .2s; }
 .feature-main { display:flex; align-items:center; gap:0.75rem; }
 .feature-label { flex:1; color:#f5f5f5; display:flex; align-items:center; gap:0.5rem; }
 .feature-control input[type="datetime-local"],
 .feature-control input[type="text"] { background:#151827; color:#f5f5f5; border:1px solid #202634; border-radius:6px; padding:0.5rem; }
 .feature-visibility { background:#151827; color:#f5f5f5; border:1px solid #202634; border-radius:6px; padding:0.4rem 0.5rem; }
 .feature-desc { width:100%; min-height:64px; background:#151827; color:#f5f5f5; border:1px solid #202634; border-radius:6px; padding:0.5rem; }
+/* Config cards (custom property configuration) */
+.feature-row.config-card { border:2px solid #202634; }
+.feature-row.config-card.value-set { border-color:#5F0AFF; background:rgba(95,10,255,0.08); }
+.feature-row.config-card:hover { border-color:#5F0AFF; }
 
 .search-section {
     display: flex;
