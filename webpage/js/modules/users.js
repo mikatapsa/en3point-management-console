@@ -176,7 +176,7 @@ export async function init() {
         // Initial render
         renderUserList();
 
-        // Mode selection handlers
+        // Mode selection handlers - ensure only selected section visible
         const modeButtons = document.querySelectorAll('.users-mode-btn');
         const userContainer = document.querySelector('.users-container');
         const forms = document.querySelectorAll('.users-onboard-form');
@@ -194,6 +194,9 @@ export async function init() {
         modeButtons.forEach(btn => {
             btn.addEventListener('click', () => switchMode(btn.dataset.mode));
         });
+
+        // Initialize default mode to 'find' so others are hidden
+        switchMode('find');
 
         // Stub onboarding form submissions
         const formDefs = [

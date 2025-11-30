@@ -1,0 +1,16 @@
+{
+  "types": ["coin", "ticket", "subscription", "identity"],
+  "standardFeatures": {
+    "coin": ["burnable", "mintable", "pausable"],
+    "ticket": ["transferable", "validFrom", "validUntil", "locked"],
+    "subscription": ["transferable", "validFrom", "validUntil", "suspended"],
+    "identity": ["locked", "suspended"]
+  },
+  "customProperties": [
+    { "key": "transferable", "label": "Transferable", "type": "boolean" },
+    { "key": "suspended", "label": "Suspended", "type": "boolean" },
+    { "key": "locked", "label": "Locked", "type": "boolean" },
+    { "key": "validFrom", "label": "Valid From", "type": "datetime" },
+    { "key": "validUntil", "label": "Valid Until", "type": "datetime" }
+  ]
+}

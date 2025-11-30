@@ -1,6 +1,6 @@
 // app.js – unified SPA navigation + per-view init hooks
 
-const buttons = document.querySelectorAll(".nav-btn");
+const buttons = document.querySelectorAll(".nav-btn[data-view]");
 const viewsContainer = document.getElementById("views-container");
 let currentView = null;
 const logoutBtn = document.getElementById("logout-btn");
@@ -97,7 +97,14 @@ function logout() {
 // AI Assistant toggle
 function toggleAIPanel() {
     if (!aiPanel) return;
-    aiPanel.classList.toggle("hidden");
+    const isHidden = aiPanel.classList.toggle("hidden");
+    
+    // Adjust views-container margin based on AI panel visibility
+    if (isHidden) {
+        viewsContainer.style.marginTop = "72px"; // Only top-bar-main
+    } else {
+        viewsContainer.style.marginTop = "480px"; // top-bar-main + AI panel
+    }
 }
 
 // Update AI Assistant context based on current view
@@ -299,6 +306,16 @@ if (discussBtn && descInput && aiResponseBox) {
 
 updateRecentQuestionsList();
 attachQuestionClickListeners();
+
+// Initialize views-container margin based on AI panel state
+if (aiPanel && viewsContainer) {
+    // Set initial margin based on whether AI panel has 'hidden' class
+    if (aiPanel.classList.contains("hidden")) {
+        viewsContainer.style.marginTop = "72px";
+    } else {
+        viewsContainer.style.marginTop = "480px";
+    }
+}
 
 // Check auth on startup
 if (checkAuth()) {

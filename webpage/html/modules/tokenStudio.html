@@ -1,3 +1,13 @@
+<!-- 
+- add token distribution in mode selector
+- only selected mode from mode selector is shows, other will be hidden.
+- token finder includes ways to search token by name, symbol, type, blockchain, properties, owner, operator, admin and last activity etc.
+- same selection will be in token minter which includes buttons for burn .
+- token editor "next" button shall be in visible area even if content overflows and requires scrolling
+- in distribution mode token distribution chart by holders, transactions, volume over time shall be shown
+- user can select multiple tokens from token finder to perform bulk actions in token editor mode
+
+  -->
 <div class="token-studio">
     <!-- Mode Selector -->
     <div class="mode-selector">
@@ -5,13 +15,14 @@
         <button class="mode-btn" data-mode="finder">Token Finder</button>
         <button class="mode-btn" data-mode="editor">Token Editor</button>
         <button class="mode-btn" data-mode="minter">Token Minter</button>
+        <button class="mode-btn" data-mode="distribution">Token Distribution</button>
     </div>
 
     <!-- Token Creator Mode -->
     <section class="token-builder token-mode active" data-mode="creator">
         <!-- Left: Multi-phase Wizard -->
         <div class="builder-wizard scrollable">
-            <h2>Token Creator</h2>
+            <h2>Token Data</h2>
             
             <!-- Progress Bar -->
             <div class="wizard-progress">
@@ -81,7 +92,6 @@
                 <!-- Step 3: Properties -->
                 <div class="wizard-step" data-step="3">
                     <h3>Token Properties</h3>
-                    
                     <div class="standard-properties">
                         <h4>Standard Properties</h4>
                         <div class="form-group">
@@ -93,6 +103,12 @@
                             </select>
                         </div>
                         <div class="form-group">
+                            <label for="business-type">Business Type</label>
+                            <select id="business-type">
+                                <!-- Populated from config -->
+                            </select>
+                        </div>
+                        <div class="form-group">
                             <label for="token-supply">Total Supply</label>
                             <input type="number" id="token-supply" placeholder="1000000" />
                         </div>
@@ -100,12 +116,18 @@
                             <label for="token-decimals">Decimals</label>
                             <input type="number" id="token-decimals" value="18" min="0" max="18" />
                         </div>
+
+                        <div class="form-group">
+                            <label>Standard Feature List</label>
+                            <div id="standard-feature-list" class="feature-list">
+                                <p class="placeholder-text">Select a business type to see standard features</p>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="custom-properties">
                         <h4>Custom Properties</h4>
-                        <div id="custom-properties-list"></div>
-                        <button id="add-property-btn" class="btn btn-secondary">+ Add Property</button>
+                        <div id="custom-properties-config-list" class="feature-list"></div>
                     </div>
                 </div>
 
@@ -192,45 +214,202 @@
 
     <!-- Token Finder Mode -->
     <section class="token-mode" data-mode="finder">
-        <div class="mode-content">
+        <div class="token-finder-search scrollable">
             <h2>Token Finder</h2>
-            <div class="search-section">
-                <input type="text" placeholder="Search by name, symbol, or address..." class="search-input" />
-                <button class="btn btn-primary">Search</button>
+            <div class="search-filters">
+                <div class="filter-row">
+                    <input type="text" id="finder-name" placeholder="Token Name" class="filter-input" />
+                    <input type="text" id="finder-symbol" placeholder="Symbol" class="filter-input" />
+                    <select id="finder-type" class="filter-select">
+                        <option value="">All Types</option>
+                        <option value="ERC20">ERC-20</option>
+                        <option value="ERC721">ERC-721</option>
+                        <option value="ERC1155">ERC-1155</option>
+                    </select>
+                </div>
+                <div class="filter-row">
+                    <select id="finder-blockchain" class="filter-select">
+                        <option value="">All Blockchains</option>
+                        <option value="ethereum">Ethereum</option>
+                        <option value="polygon">Polygon</option>
+                        <option value="bsc">BSC</option>
+                    </select>
+                    <input type="text" id="finder-owner" placeholder="Owner Address" class="filter-input" />
+                    <input type="text" id="finder-operator" placeholder="Operator Address" class="filter-input" />
+                </div>
+                <div class="filter-row">
+                    <input type="text" id="finder-admin" placeholder="Admin Address" class="filter-input" />
+                    <input type="text" id="finder-properties" placeholder="Properties (comma-separated)" class="filter-input" />
+                    <select id="finder-activity" class="filter-select">
+                        <option value="">Last Activity</option>
+                        <option value="24h">Last 24 hours</option>
+                        <option value="7d">Last 7 days</option>
+                        <option value="30d">Last 30 days</option>
+                    </select>
+                </div>
+                <div class="filter-actions">
+                    <button id="finder-search-btn" class="btn btn-primary">Search</button>
+                    <button id="finder-clear-btn" class="btn btn-secondary">Clear Filters</button>
+                </div>
             </div>
-            <div class="results-list">
-                <p class="placeholder-text">Search results will appear here</p>
+            <div id="finder-results-list" class="results-list">
+                <p class="placeholder-text">Use filters above to search for tokens</p>
+            </div>
+        </div>
+        <div class="token-preview scrollable">
+            <h2>Token Preview</h2>
+            <div class="preview-card">
+                <div id="finder-preview-content" class="finder-preview-content">
+                    <p class="placeholder-text">Select a token to view details</p>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- Token Editor Mode -->
     <section class="token-mode" data-mode="editor">
-        <div class="mode-content">
+        <div class="token-finder-search scrollable">
             <h2>Token Editor</h2>
-            <p class="placeholder-text">Select a token to edit its properties</p>
+            <div class="search-filters">
+                <div class="filter-row">
+                    <input type="text" id="editor-search" placeholder="Search tokens..." class="filter-input" />
+                    <button id="editor-search-btn" class="btn btn-primary">Search</button>
+                </div>
+                <div class="bulk-actions-bar">
+                    <label>
+                        <input type="checkbox" id="select-all-tokens" />
+                        Select All
+                    </label>
+                    <button id="bulk-edit-btn" class="btn btn-secondary" disabled>Edit Selected</button>
+                    <button id="bulk-delete-btn" class="btn btn-danger" disabled>Delete Selected</button>
+                    <span id="selected-count" class="selected-count">0 selected</span>
+                </div>
+            </div>
+            <div id="editor-token-list" class="results-list">
+                <p class="placeholder-text">Search for tokens to edit</p>
+            </div>
+        </div>
+        <div class="token-preview scrollable">
+            <h2>Token Editor</h2>
+            <div class="preview-card">
+                <div id="editor-preview-content" class="editor-preview-content">
+                    <p class="placeholder-text">Select a token to edit its properties</p>
+                </div>
+            </div>
+            <div class="editor-actions-sticky">
+                <button id="editor-save-btn" class="btn btn-success" disabled>Save Changes</button>
+                <button id="editor-cancel-btn" class="btn btn-secondary" disabled>Cancel</button>
+            </div>
         </div>
     </section>
 
     <!-- Token Minter Mode -->
     <section class="token-mode" data-mode="minter">
-        <div class="mode-content">
+        <div class="token-finder-search scrollable">
             <h2>Token Minter</h2>
-            <div class="form-group">
-                <label for="mint-token-select">Select Token</label>
-                <select id="mint-token-select">
-                    <option value="">Choose a token...</option>
+            <div class="search-filters">
+                <div class="filter-row">
+                    <input type="text" id="minter-name" placeholder="Token Name" class="filter-input" />
+                    <input type="text" id="minter-symbol" placeholder="Symbol" class="filter-input" />
+                    <select id="minter-type" class="filter-select">
+                        <option value="">All Types</option>
+                        <option value="ERC20">ERC-20</option>
+                        <option value="ERC721">ERC-721</option>
+                        <option value="ERC1155">ERC-1155</option>
+                    </select>
+                </div>
+                <div class="filter-actions">
+                    <button id="minter-search-btn" class="btn btn-primary">Search</button>
+                    <button id="minter-clear-btn" class="btn btn-secondary">Clear</button>
+                </div>
+            </div>
+            <div id="minter-results-list" class="results-list">
+                <p class="placeholder-text">Search for a token to mint or burn</p>
+            </div>
+        </div>
+        <div class="token-preview scrollable">
+            <h2>Token Actions</h2>
+            <div class="preview-card">
+                <div id="minter-preview-content" class="minter-preview-content">
+                    <p class="placeholder-text">Select a token to mint or burn</p>
+                </div>
+                <div class="minter-actions" style="margin-top: 1.5rem;">
+                    <div class="form-group">
+                        <label for="mint-to-address">Address</label>
+                        <input type="text" id="mint-to-address" placeholder="0x..." />
+                    </div>
+                    <div class="form-group">
+                        <label for="mint-amount">Amount</label>
+                        <input type="number" id="mint-amount" placeholder="1000" />
+                    </div>
+                    <div style="display: flex; gap: 0.75rem;">
+                        <button id="mint-btn" class="btn btn-primary">Mint Tokens</button>
+                        <button id="burn-btn" class="btn btn-danger">Burn Tokens</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Token Distribution Mode -->
+    <section class="token-mode" data-mode="distribution">
+        <div class="distribution-container">
+            <h2>Token Distribution Analytics</h2>
+            
+            <div class="distribution-controls">
+                <select id="distribution-token-select" class="filter-select">
+                    <option value="">Select a token...</option>
                 </select>
+                <select id="distribution-timeframe" class="filter-select">
+                    <option value="24h">Last 24 Hours</option>
+                    <option value="7d">Last 7 Days</option>
+                    <option value="30d">Last 30 Days</option>
+                    <option value="all">All Time</option>
+                </select>
+                <button id="distribution-refresh-btn" class="btn btn-primary">Refresh</button>
             </div>
-            <div class="form-group">
-                <label for="mint-to-address">Mint to Address</label>
-                <input type="text" id="mint-to-address" placeholder="0x..." />
+
+            <div class="distribution-charts">
+                <div class="chart-card">
+                    <h3>Distribution by Holders</h3>
+                    <div id="holders-chart" class="chart-placeholder">
+                        <p class="placeholder-text">Select a token to view holder distribution</p>
+                    </div>
+                </div>
+                
+                <div class="chart-card">
+                    <h3>Transaction Volume</h3>
+                    <div id="transactions-chart" class="chart-placeholder">
+                        <p class="placeholder-text">Select a token to view transaction data</p>
+                    </div>
+                </div>
+                
+                <div class="chart-card">
+                    <h3>Volume Over Time</h3>
+                    <div id="volume-chart" class="chart-placeholder">
+                        <p class="placeholder-text">Select a token to view volume trends</p>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="mint-amount">Amount</label>
-                <input type="number" id="mint-amount" placeholder="1000" />
+
+            <div class="distribution-stats">
+                <div class="stat-card">
+                    <h4>Total Holders</h4>
+                    <p id="total-holders" class="stat-value">-</p>
+                </div>
+                <div class="stat-card">
+                    <h4>Total Supply</h4>
+                    <p id="total-supply" class="stat-value">-</p>
+                </div>
+                <div class="stat-card">
+                    <h4>Circulating Supply</h4>
+                    <p id="circulating-supply" class="stat-value">-</p>
+                </div>
+                <div class="stat-card">
+                    <h4>24h Volume</h4>
+                    <p id="daily-volume" class="stat-value">-</p>
+                </div>
             </div>
-            <button class="btn btn-primary">Mint Tokens</button>
         </div>
     </section>
 </div>

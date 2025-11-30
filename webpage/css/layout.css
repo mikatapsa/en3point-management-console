@@ -74,14 +74,16 @@
 
 #views-container {
     padding: 16px;
-    margin-top: 480px; /* top-bar-main ~72px + AI panel 400px */
+    margin-top: 72px; /* Default: top-bar-main only. JS adjusts when AI panel shown */
 }
 .view-content {
     /* Dynamic content container */
     min-height: calc(100vh - 480px);
 }
 .view-content.scrollable {
-    max-height: calc(100vh - 500px);
+    /* Fill viewport height but never less than 1400px */
+    height: max(100vh, 1400px);
+    min-height: 1400px;
     overflow-y: auto;
     overflow-x: hidden;
 }
@@ -110,9 +112,23 @@
 #recent-questions-list:empty::before { content:"No recent questions yet"; color:#6b7280; font-size:.7rem; font-style:italic; }
 .ai-response { min-height:140px; max-height:240px; overflow-y:auto; background:#0b0c10; border:1px solid #202634; border-radius:8px; padding:12px; color:#f5f5f5; }
 .ai-reply { background:#202634; border-radius:8px; padding:8px; margin-bottom:8px; }
-.ai-deeplinks { margin-top:8px; display:flex; flex-direction:column; gap:6px; }
-.ai-deeplinks a { color:#5F0AFF; font-size:.8rem; text-decoration:none; }
-.ai-deeplinks a:hover { text-decoration:underline; }
+.ai-deeplinks { margin-top:8px; display:flex; flex-wrap:wrap; gap:8px; }
+.ai-deeplinks a { 
+    display: inline-block;
+    padding: 6px 12px;
+    background: #202634;
+    color: #5F0AFF;
+    font-size: .8rem;
+    text-decoration: none;
+    border: 1px solid #5F0AFF;
+    border-radius: 6px;
+    transition: all .2s;
+}
+.ai-deeplinks a:hover { 
+    background: #5F0AFF;
+    color: white;
+    text-decoration: none;
+}
 .placeholder-text { color:#6b7280; font-style:italic; font-size:.75rem; }
 .login-screen {
     max-width: 420px;
